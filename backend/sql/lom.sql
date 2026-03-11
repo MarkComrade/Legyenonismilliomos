@@ -31,9 +31,6 @@ CREATE TABLE users(
 	`role` VARCHAR(255) DEFAULT 'user'
 );
 
-INSERT INTO users (username, password) 
-VALUES ('david', 'david');
-
 -- Tábla adatainak mentése lom.kerdesek: ~4 949 rows (hozzávetőleg)
 /*!40000 ALTER TABLE `kerdesek` DISABLE KEYS */;
 INSERT INTO `kerdesek` (`id`, `kerdes`, `nehezseg`) VALUES

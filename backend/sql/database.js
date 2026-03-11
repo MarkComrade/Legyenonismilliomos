@@ -39,11 +39,6 @@ async function login(userName, password) {
     }
 }
 
-//!Export
-module.exports = {
-    selectall,
-    register,
-    login
 async function insertQuestion(question, difficulty) { 
     const [lastKerdesId] = await pool.execute('SELECT MAX(id) AS maxId FROM kerdesek;');
     let questionId = (lastKerdesId[0].maxId) + 1;
@@ -65,10 +60,11 @@ async function insertAnswer(questionId, answer1, answer2, answer3, answer4, isCo
     await pool.execute(query, [nextId++, answer4, questionId, isCorrect === "fourthCorrect" ? 1 : 0]);
 }
 
-
 //!Export
 module.exports = {
     selectall,
+    register,
+    login,
     insertQuestion,
     insertAnswer
 };
