@@ -45,7 +45,7 @@ router.post('/addQuestion', upload.none(), async (request, response) => {
     try {
         const {question, difficulty, answer1, answer2, answer3, answer4, correctAnswer} = request.body;
         const questionId = await database.insertQuestion(question, difficulty);
-        
+
         await database.insertAnswer(questionId, answer1, answer2, answer3, answer4, correctAnswer);
 
         response.status(200).json({
@@ -59,6 +59,32 @@ router.post('/addQuestion', upload.none(), async (request, response) => {
             message: 'Hiba történt a kérdés hozzáadásakor.'
         });
     }
+});
+
+router.get('/getGameState', async (request, response) => {
+    try {
+        request.session.round = 1;
+        request.session.money = 0;
+        response.status(200).json({
+            round: request.session.round,
+            money: request.session.money
+        });
+    } catch (error) {
+        response.status(500).json({
+            message: 'Hiba történt a játék állapotának lekérésekor.',
+        });
+});
+
+router.get('/getQuestion', async (request, response) => { 
+    try { 
+
+    } catch (error) {
+
+    }
+});
+
+router.get('/getAnswers', async (request, response) => {
+
 });
 
 module.exports = router;
