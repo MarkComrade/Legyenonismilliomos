@@ -2,9 +2,7 @@ const express = require('express');
 const router = express.Router();
 const database = require('../sql/database.js');
 const fs = require('fs/promises');
-
-//!Multer
-const multer = require('multer'); //?npm install multer
+const multer = require('multer');
 const path = require('path');
 
 const storage = multer.diskStorage({
@@ -12,21 +10,18 @@ const storage = multer.diskStorage({
         callback(null, path.join(__dirname, '../uploads'));
     },
     filename: (request, file, callback) => {
-        callback(null, Date.now() + '-' + file.originalname); //?egyedi név: dátum - file eredeti neve
+        callback(null, Date.now() + '-' + file.originalname);
     }
 });
 
 const upload = multer({ storage });
 
-//!Endpoints:
-//?GET /api/test
 router.get('/test', (request, response) => {
     response.status(200).json({
         message: 'Ez a végpont működik.'
     });
 });
 
-//?GET /api/testsql
 router.get('/testsql', async (request, response) => {
     try {
         const selectall = await database.selectall();
@@ -69,12 +64,12 @@ router.post('/login', async (req, res) => {
 
         req.session.userId = user.id;
         req.session.userName = user.userName;
-        req.session.isAdmin = user.isAdmin || false;
+        req.session.role = user.role;
 
         res.status(200).json({
             success: true,
             message: "Sikeres bejelentkezés",
-            isAdmin: user.isAdmin
+            role: user.role
         });
 
     } catch (err) {
@@ -95,7 +90,7 @@ router.get('/check-session', (request, response) => {
         response.status(200).json({
             loggedIn: true,
             userName: request.session.userName,
-            isAdmin: request.session.isAdmin
+            role: request.session.role
         });
     } else {
         response.status(200).json({
@@ -103,6 +98,7 @@ router.get('/check-session', (request, response) => {
         });
     }
 });
+
 router.post('/addQuestion', upload.none(), async (request, response) => { 
     try {
         const {question, difficulty, answer1, answer2, answer3, answer4, correctAnswer} = request.body;
@@ -116,7 +112,6 @@ router.post('/addQuestion', upload.none(), async (request, response) => {
         });
     } catch (error) {
         console.log(error);
-
         response.status(500).json({
             message: 'Hiba történt a kérdés hozzáadásakor.'
         });

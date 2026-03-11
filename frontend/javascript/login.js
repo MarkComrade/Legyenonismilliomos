@@ -9,20 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const password = document.getElementById("password").value;
 
         try {
-            const response = await fetch("/api/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify({ userName, password })
-            });
-
-            const data = await response.json();
+            const data = await postMethodFetch("/api/login", { userName, password });
 
             if (data.success) {
                 messageDiv.textContent = "Sikeres bejelentkezés!";
                 setTimeout(() => {
-                    if (data.isAdmin) window.location.href = "admin.html";
-                    else window.location.href = "index.html";
+                    window.location.href = "index.html";
                 }, 1000);
             } else {
                 messageDiv.textContent = "Sikertelen bejelentkezés: " + data.message;
