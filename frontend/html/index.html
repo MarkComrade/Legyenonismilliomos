@@ -15,21 +15,14 @@
         <script src="../javascript/index.js"></script>
     </head>
     <body>
-        <div class="container-fluid">
-            <div class="row text-center">
-                <h1 class="display-1">Jusson ki ön is a putriból</h1>
-            </div>
-
-            <div class="row justify-content-center">
-                <input type="button" id="loginBtn">
-            </div>
-
-            <div class="row justify-content-center">
-                <input type="button" id="gameBtn" hidden>
-            </div>
-
-            <div class="row justify-content-center">
-                <input type="button" id="adminBtn">
+        <div class="container-fluid ibg">
+            <div class="d-flex row justify-content-center align-text-center">
+                <h1 class="display-1 cim">Jusson ki ön is a putriból</h1>
+                <div class="d-flex flex-column col-sm-10 col-md-4">
+                    <input type="button" id="loginBtn" class="ibtn btn m-3 rounded-3 p-3" value="Bejelentkezés">
+                    <input type="button" id="gameBtn" class="ibtn btn m-3 rounded-3 p-3" hidden value="Indítás">
+                    <input type="button" id="adminBtn" class="ibtn btn m-3 rounded-3 p-3" value="Admin">
+                </div>
             </div>
         </div>
     </body>
