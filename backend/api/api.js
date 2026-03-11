@@ -100,7 +100,7 @@ router.get('/check-session', (request, response) => {
     } else {
         response.status(200).json({
             loggedIn: false
-        });
+        });  
     }
 });
 router.post('/addQuestion', upload.none(), async (request, response) => { 
@@ -123,10 +123,11 @@ router.post('/addQuestion', upload.none(), async (request, response) => {
     }
 });
 
-router.get('/getGameState', async (request, response) => {
+router.post('/updateGameState', async (request, response) => {
     try {
-        request.session.round = 1;
-        request.session.money = 0;
+        const { round, money } = request.body;
+        request.session.round = round;
+        request.session.money = money;
         response.status(200).json({
             round: request.session.round,
             money: request.session.money
@@ -140,14 +141,19 @@ router.get('/getGameState', async (request, response) => {
 
 router.get('/getQuestion', async (request, response) => { 
     try { 
-
+        const question = await database.getQuestion(request.session.round);
+        const answers = await database.getAnswers(question.id);
+        response.status(200).json({
+            question,
+            answers
+        });
     } catch (error) {
-
+        response.status(500).json({
+            message: 'Hiba történt a kérdés lekérésekor.'
+        });
     }
 });
 
-router.get('/getAnswers', async (request, response) => {
 
-});
 
 module.exports = router;
