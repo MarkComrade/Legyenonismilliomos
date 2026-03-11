@@ -1,15 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('gameBtn').addEventListener('click', () => {
-        window.location.href = "game.html"
-    })
+    const loginBtn = document.getElementById('loginBtn');
+    const registerBtn = document.getElementById('registerBtn');
+    const startGameBtn = document.getElementById('startGameBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const loginContainer = document.getElementById('loginContainer');
+    const gameContainer = document.getElementById('gameContainer');
+    const userNameSpan = document.getElementById('userName');
 
-    document.getElementById('loginBtn').addEventListener('click', () => {
-        window.location.href = "login.html"
-    })
+    loginBtn.addEventListener('click', () => {
+        window.location.href = 'login.html';
+    });
 
-    document.getElementById('adminBtn').addEventListener('click', () => {
-        window.location.href = "admin.html"
-    })
+    registerBtn.addEventListener('click', () => {
+        window.location.href = 'register.html';
+    });
+
+    startGameBtn.addEventListener('click', () => {
+        window.location.href = 'game.html';
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+        await fetch('/api/logout', {
+            method: 'GET',
+            credentials: 'include'
+        });
+        location.reload();
+    });
+
+    async function checkSession() {
+        try {
+            const response = await fetch('/api/check-session', {
+                credentials: 'include'
+            });
+            const data = await response.json();
+            
+            if (data.loggedIn) {
+                loginContainer.style.display = 'none';
+                gameContainer.style.display = 'block';
+                userNameSpan.textContent = data.userName;
+            } else {
+                loginContainer.style.display = 'block';
+                gameContainer.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Hiba:', error);
+        }
+    }
+
+    checkSession();
 });
 
 const getMethodFetch = async() => {
@@ -24,26 +62,22 @@ const getMethodFetch = async() => {
     }
 }
 
-const postMethodFetch = async() => {
+const postMethodFetch = async (url, data) => {
     try{
         const response = await fetch(url, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify();
+            body: JSON.stringify(data)
         });
+
         if(!response.ok){
-            throw new Error(`GET hipa: ${response.status} ${response.statusText}`);
+            throw new Error(`POST hiba: ${response.status}`);
         }
+
         return await response.json();
     } catch(error){
-        throw new Error(`Hipa: `, error);
+        throw error;
     }
 }
 
-const login = async() =>{
-    try{
 
-    } catch(error){
-        console.error(error);
-    }
-}

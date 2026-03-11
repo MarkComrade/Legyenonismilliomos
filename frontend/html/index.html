@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Főoldal</title>
+        <title>Legyél milliomos!</title>
         <!--!Bootstrap-->
         <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
         <!--?Popper: dropdowns, popovers, tooltips-->
@@ -15,22 +15,28 @@
         <script src="../javascript/index.js"></script>
     </head>
     <body>
-        <div class="container-fluid">
-            <div class="row text-center">
-                <h1 class="display-1">Legyen ön is milliomos főoldal</h1>
-            </div>
-
+        <div id="navbar"></div>
+        
+        <div id="loginContainer" class="container mt-5">
             <div class="row justify-content-center">
-                <input type="button" id="loginBtn">
-            </div>
-
-            <div class="row justify-content-center">
-                <input type="button" id="gameBtn" hidden>
-            </div>
-
-            <div class="row justify-content-center">
-                <input type="button" id="adminBtn">
+                <div class="col-md-6 text-center">
+                    <h2>Legyél milliomos!</h2>
+                    <button id="loginBtn" class="btn btn-primary btn-lg">Bejelentkezés</button>
+                    <button id="registerBtn" class="btn btn-secondary btn-lg">Regisztráció</button>
+                </div>
             </div>
         </div>
+        
+        <div id="gameContainer" class="container mt-5" style="display: none;">
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <h2>Üdvözlünk <span id="userName"></span>!</h2>
+                    <button id="startGameBtn" class="btn btn-success btn-lg">Játék kezdése</button>
+                    <button id="logoutBtn" class="btn btn-danger btn-lg">Kijelentkezés</button>
+                </div>
+            </div>
+        </div>
+        
+        <script src="../javascript/index.js"></script>
     </body>
 </html>

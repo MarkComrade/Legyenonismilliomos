@@ -41,28 +41,65 @@ router.get('/testsql', async (request, response) => {
     }
 });
 
-router.post('/register', async (request, response) => {
-    try{
-        const userName = request.body.userName;
-        const password = request.body.password;
-        const register = await database.register(userName, password);
-        
-        response.status(200).json({
-            message: 'A regisztrációs végpont működik'
-        });
-    } catch(error){
-        response.status(500).json({
-            message: 'Ez a végpont nem működik.'
-        })
+router.post('/register', async (req, res) => {
+    try {
+        const { userName, password } = req.body;
+
+        if (!userName || !password) {
+            return res.status(400).json({ success: false, message: "Hiányzó adatok" });
+        }
+
+        await database.register(userName, password);
+        res.status(201).json({ success: true, message: "Sikeres regisztráció" });
+
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
     }
 });
 
-router.get('/login', async (request, response) => {
-    try{
+router.post('/login', async (req, res) => {
+    try {
+        const { userName, password } = req.body;
 
-    } catch(error){
-        response.status(500).json({
-            message: 'Nem működik a végpont.'
+        if (!userName || !password) {
+            return res.status(400).json({ success: false, message: "Hiányzó adatok" });
+        }
+
+        const user = await database.login(userName, password);
+
+        req.session.userId = user.id;
+        req.session.userName = user.userName;
+        req.session.isAdmin = user.isAdmin || false;
+
+        res.status(200).json({
+            success: true,
+            message: "Sikeres bejelentkezés",
+            isAdmin: user.isAdmin
+        });
+
+    } catch (err) {
+        res.status(401).json({ success: false, message: err.message });
+    }
+});
+
+router.get('/logout', (request, response) => {
+    request.session.destroy();
+    response.status(200).json({
+        message: 'Kijelentkezve',
+        success: true
+    });
+});
+
+router.get('/check-session', (request, response) => {
+    if (request.session.userId) {
+        response.status(200).json({
+            loggedIn: true,
+            userName: request.session.userName,
+            isAdmin: request.session.isAdmin
+        });
+    } else {
+        response.status(200).json({
+            loggedIn: false
         });
     }
 });
