@@ -44,9 +44,8 @@ router.get('/testsql', async (request, response) => {
 router.post('/addQuestion', upload.none(), async (request, response) => { 
     try {
         const {question, difficulty, answer1, answer2, answer3, answer4, correctAnswer} = request.body;
-        await database.insertQuestion(question, difficulty);
-        const questionId = result.insertId;
-
+        const questionId = await database.insertQuestion(question, difficulty);
+        
         await database.insertAnswer(questionId, answer1, answer2, answer3, answer4, correctAnswer);
 
         response.status(200).json({
