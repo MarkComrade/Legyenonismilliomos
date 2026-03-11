@@ -60,3 +60,25 @@ html, body {
 .formd > * {
     margin-bottom: 7px;
 }
+
+#difficultySelect {
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border: solid 1px black;
+}
+
+#submitBtn {
+    background-color: rgb(92, 110, 79);
+    color: whitesmoke;
+    font-size: 1.1rem;
+    border: none;
+    transition: background-color 0.3s ease;
+    border: solid 1px black;
+    border-radius: 5px;
+}
+
+#submitBtn:hover {
+    background-color: rgb(50, 70, 50); 
+    color: whitesmoke;
+    border: solid 1px black;
+    border-radius: 5px;
+}
