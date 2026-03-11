@@ -17,12 +17,11 @@
     <body>
         <div class="container-fluid">
             <div class="row text-center">
-                <h1 class="display-1">Legyen ön is milliomos főoldal</h1>
+                <h1 class="display-1" style="margin-bottom: 50px;">Legyen ön is milliomos főoldal</h1>
             </div>
 
             <div class="row justify-content-center">
                 <div class="col-md-6 text-center" id="loginContainer" style="display: block;">
-                    <h2>Legyél milliomos!</h2>
                     <button id="loginBtn" class="btn btn-primary btn-lg">Bejelentkezés</button>
                     <button id="registerBtn" class="btn btn-secondary btn-lg">Regisztráció</button>
                 </div>
@@ -31,12 +30,12 @@
         
         <div id="gameContainer" class="container mt-5" style="display: none;">
             <div class="row justify-content-center">
-                <div class="col-md-8 text-center">
+                <div class="col-md-8 text-center" style="display: flex; max-width: 300px; flex-direction: column;">
                     <h2>Üdvözlünk <span id="userName"></span>!</h2>
-                    <button id="startGameBtn" class="btn btn-success btn-lg">Játék kezdése</button>
-                    <button id="logoutBtn" class="btn btn-danger btn-lg">Kijelentkezés</button>
+                    <button id="startGameBtn" style="margin: 10px;" class="btn btn-success btn-lg">Játék kezdése</button>
+                    <button id="logoutBtn" style="margin: 10px;" class="btn btn-danger btn-lg">Kijelentkezés</button>
                 </div>
-                <input type="button" id="adminBtn" value="Admin">
+                <input type="button" id="adminBtn" value="Admin" style="display: none;" class="btn btn-warning btn-lg mt-3" />
             </div>
         </div>
         
