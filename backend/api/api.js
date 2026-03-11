@@ -103,7 +103,6 @@ router.get('/check-session', (request, response) => {
         });  
     }
 });
-
 router.post('/addQuestion', upload.none(), async (request, response) => { 
     try {
         const {question, difficulty, answer1, answer2, answer3, answer4, correctAnswer} = request.body;

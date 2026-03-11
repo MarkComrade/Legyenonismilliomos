@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 credentials: 'include'
             });
             const data = await response.json();
+            console.log(data);
             
             if (data.loggedIn) {
                 loginContainer.style.display = 'none';
@@ -49,35 +50,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkSession();
 });
-
-const getMethodFetch = async() => {
-    try{
-        const response = await fetch(url);
-        if(!response.ok){
-            throw new Error(`GET hipa: ${response.status} ${response.statusText}`);
-        }
-        return await response.json();
-    } catch(error){
-        throw new Error(`Hipa: `, error);
-    }
-}
-
-const postMethodFetch = async (url, data) => {
-    try{
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
-
-        if(!response.ok){
-            throw new Error(`POST hiba: ${response.status}`);
-        }
-
-        return await response.json();
-    } catch(error){
-        throw error;
-    }
-}
-
-

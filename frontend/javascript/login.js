@@ -2,11 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById("loginForm");
     const messageDiv = document.getElementById("message");
 
-    if (!loginForm || !messageDiv) {
-        console.error("Nem található loginForm vagy messageDiv!");
-        return;
-    }
-
     loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
