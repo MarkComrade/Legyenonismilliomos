@@ -24,6 +24,16 @@ CREATE TABLE IF NOT EXISTS `kerdesek` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
+CREATE TABLE users(
+	`id` INT AUTO_INCREMENT PRIMARY KEY,
+	`username` VARCHAR(255) NOT NULL,
+	`password` VARCHAR(255) NOT NULL,
+	`role` VARCHAR(255) DEFAULT 'user'
+);
+
+INSERT INTO users (username, password) 
+VALUES ('david', 'david');
+
 -- Tábla adatainak mentése lom.kerdesek: ~4 949 rows (hozzávetőleg)
 /*!40000 ALTER TABLE `kerdesek` DISABLE KEYS */;
 INSERT INTO `kerdesek` (`id`, `kerdes`, `nehezseg`) VALUES
