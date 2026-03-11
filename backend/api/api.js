@@ -102,6 +102,7 @@ router.get('/check-session', (request, response) => {
             loggedIn: false
         });
     }
+});
 router.post('/addQuestion', upload.none(), async (request, response) => { 
     try {
         const {question, difficulty, answer1, answer2, answer3, answer4, correctAnswer} = request.body;
@@ -134,6 +135,7 @@ router.get('/getGameState', async (request, response) => {
         response.status(500).json({
             message: 'Hiba történt a játék állapotának lekérésekor.',
         });
+    }
 });
 
 router.get('/getQuestion', async (request, response) => { 
