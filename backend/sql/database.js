@@ -16,7 +16,12 @@ async function selectall() {
     const [rows] = await pool.execute(query);
     return rows;
 }
+
+async function register(userName, password) {
+    const query = ``
+}
 //!Export
 module.exports = {
-    selectall
+    selectall,
+    register
 };

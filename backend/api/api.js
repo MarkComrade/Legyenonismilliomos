@@ -41,4 +41,30 @@ router.get('/testsql', async (request, response) => {
     }
 });
 
+router.post('/register', async (request, response) => {
+    try{
+        const userName = request.body.userName;
+        const password = request.body.password;
+        const register = await database.register(userName, password);
+        
+        response.status(200).json({
+            message: 'A regisztrációs végpont működik'
+        });
+    } catch(error){
+        response.status(500).json({
+            message: 'Ez a végpont nem működik.'
+        })
+    }
+});
+
+router.get('/login', async (request, response) => {
+    try{
+
+    } catch(error){
+        response.status(500).json({
+            message: 'Nem működik a végpont.'
+        });
+    }
+});
+
 module.exports = router;
