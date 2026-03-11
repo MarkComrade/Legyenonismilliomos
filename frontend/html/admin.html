@@ -3,7 +3,15 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title></title>
+        <title>Admin</title>
+
+        <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
+        <!--?Popper: dropdowns, popovers, tooltips-->
+        <script src="../bootstrap/js/popper.min.js"></script>
+        <script src="../bootstrap/js/bootstrap.min.js"></script>
+
+        <script src="../javascript/admin.js"></script>
+        <script src="../javascript/postGet.js"></script>
     </head>
     <body>
         <div class="container-fluid">
@@ -15,7 +23,7 @@
                 <div class="col-sm-12">
                     <p>Kérdés hozzáadása</p>
 
-                    <form>
+                    <form id="questionForm">
                         <label for="questionBody">Adja meg az új kérdést</label>
                         <input type="text" id="questionBody" />
 
@@ -53,6 +61,21 @@
 
                         <label for="answer1">Első válasz</label>
                         <input type="text" id="answer1" />
+                        <input type="radio" id="firstCorrect" name="correctAnswer"></input>
+
+                        <label for="answer2">Második válasz</label>
+                        <input type="text" id="answer2" />
+                        <input type="radio" id="secondCorrect" name="correctAnswer"></input>
+
+                        <label for="answer3">Harmadik válasz</label>
+                        <input type="text" id="answer3" />
+                        <input type="radio" id="thirdCorrect" name="correctAnswer"></input>
+
+                        <label for="answer4">Negyedik válasz</label>
+                        <input type="text" id="answer4" />
+                        <input type="radio" id="fourthCorrect" name="correctAnswer"></input>
+
+                        <input type="button" id="submitBtn" value="Kérdés hozzáadása"/>
                     </form>
                 </div>
             </div>

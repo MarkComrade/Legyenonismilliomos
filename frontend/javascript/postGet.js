@@ -10,7 +10,7 @@ const getMethodFetch = async (url) => {
   }
 }
 
-const postMethodFetch = (url, data) => {
+const postMethodFetch = async (url, data) => {
   return fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

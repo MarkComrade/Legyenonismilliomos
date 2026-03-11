@@ -41,4 +41,25 @@ router.get('/testsql', async (request, response) => {
     }
 });
 
+router.post('/addQuestion', upload.none(), async (request, response) => { 
+    try {
+        const {question, difficulty, answer1, answer2, answer3, answer4, correctAnswer} = request.body;
+        await database.insertQuestion(question, difficulty);
+        const questionId = result.insertId;
+
+        await database.insertAnswer(questionId, answer1, answer2, answer3, answer4, correctAnswer);
+
+        response.status(200).json({
+            message: 'Kérdés sikeresen hozzáadva.',
+            result: {question, difficulty, answer1, answer2, answer3, answer4, correctAnswer}
+        });
+    } catch (error) {
+        console.log(error);
+
+        response.status(500).json({
+            message: 'Hiba történt a kérdés hozzáadásakor.'
+        });
+    }
+});
+
 module.exports = router;
