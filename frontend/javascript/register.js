@@ -9,6 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const userName = document.getElementById("userName").value;
         const password = document.getElementById("password").value;
+        const password2 = document.getElementById("password2").value;
+
+        if (password !== password2) {
+            messageDiv.textContent = "A jelszavak nem egyeznek!";
+            return;
+        }
 
         try {
             const data = await postMethodFetch("/api/register", { userName, password });
