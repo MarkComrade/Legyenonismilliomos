@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const loginBtn = document.getElementById('loginBtn');
     const registerBtn = document.getElementById('registerBtn');
-    const startGameBtn = document.getElementById('startGameBtn');
+    const gameBtn = document.getElementById('gameBtn');
     const logoutBtn = document.getElementById('logoutBtn');
-    const loginContainer = document.getElementById('loginContainer');
-    const gameContainer = document.getElementById('gameContainer');
-    const userNameSpan = document.getElementById('userName');
+    const notLoggedIn = document.getElementById('notLoggedIn');
+    const loggedIn = document.getElementById('loggedIn');
+    const welcomeText = document.getElementById('welcomeText');
     const adminBtn = document.getElementById('adminBtn');
 
     loginBtn.addEventListener('click', () => {
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'register.html';
     });
 
-    startGameBtn.addEventListener('click', () => {
+    gameBtn.addEventListener('click', () => {
         window.location.href = 'game.html';
     });
 
@@ -38,19 +38,19 @@ document.addEventListener('DOMContentLoaded', () => {
     async function checkSession() {
         try {
             const data = await getMethodFetch('/api/check-session');
-            console.log(data);
-            
-            if (data.loggedIn) {
-                loginContainer.style.display = 'none';
-                gameContainer.style.display = 'block';
-                userNameSpan.textContent = data.userName;
 
-                if (data.role === 'admin' && adminBtn) {
-                    adminBtn.style.display = 'block';
+            if (data.loggedIn) {
+                notLoggedIn.style.display = 'none';
+                loggedIn.style.display = 'flex';
+
+                welcomeText.textContent = "Üdv, " + data.userName + "!";
+
+                if (data.role !== 'admin' && adminBtn) {
+                    adminBtn.style.display = 'none';
                 }
             } else {
-                loginContainer.style.display = 'block';
-                gameContainer.style.display = 'none';
+                notLoggedIn.style.display = 'flex';
+                loggedIn.style.display = 'none';
             }
         } catch (error) {
             console.error('Hiba:', error);
