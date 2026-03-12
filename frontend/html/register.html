@@ -1,37 +1,44 @@
 <!DOCTYPE html>
 <html lang="hu">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Regisztráció - Legyél milliomos!</title>
-        <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
-        <script src="../bootstrap/js/popper.min.js"></script>
-        <script src="../bootstrap/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="../css/index.css" />
-    </head>
-    <body>
-        <div class="container mt-5">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <h2 class="mb-4">Regisztráció</h2>
-                    <form id="registerForm">
-                        <div class="mb-3">
-                            <label for="userName" class="form-label">Felhasználónév</label>
-                            <input type="text" class="form-control" id="userName" name="userName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Jelszó</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Regisztráció</button>
-                    </form>
-                    <div id="message" class="mt-3"></div>
-                    <p class="mt-3">Van már fiókod? <a href="login.html">Bejelentkezés</a></p>
-                </div>
-            </div>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Regisztráció - Legyél milliomos!</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
+    <script src="../bootstrap/js/popper.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../css/index.css" />
+</head>
+
+<body>
+    <div class="d-flex flex-column container-fluid  ibg">
+        <div class="d-flex row justify-content-center align-text-center">
+            <h1 class="display-1 cim">Regisztráció</h1>
         </div>
 
-        <script src="../javascript/postGet.js"></script>
-        <script src="../javascript/register.js"></script>
-    </body>
+        <div class="d-flex row justify-content-center">
+            <div class="col-sm-10 col-md-4">
+
+                <form id="registerForm" class="d-flex flex-column form-control formd">
+                    <label for="userName" class="form-label">Felhasználónév</label>
+                    <input type="text" id="userName" name="userName" required>
+
+                    <label for="password" class="form-label">Jelszó</label>
+                    <input type="password" id="password" name="password" required>
+
+                    <button type="submit" class="btn registerBtn">Regisztráció</button>
+
+                    <div id="message" class="mt-3"></div>
+                    <p class="mt-3">Van már fiókod? <a href="login.html">Bejelentkezés</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../javascript/postGet.js"></script>
+    <script src="../javascript/register.js"></script>
+</body>
+
 </html>
