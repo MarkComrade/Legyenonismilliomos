@@ -1,4 +1,5 @@
 const mysql = require('mysql2/promise');
+const crypto = require('crypto');
 
 const pool = mysql.createPool({
     host: '127.0.0.1',
@@ -10,11 +11,33 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-//!SQL Queries
+function hashPassword(password) {
+    return crypto.createHash('sha256').update(password).digest('hex');
+}
+
 async function selectall() {
     const query = 'SELECT * FROM exampletable;';
     const [rows] = await pool.execute(query);
     return rows;
+}
+
+async function register(userName, password) {
+    const hashedPassword = hashPassword(password);
+    const query = 'INSERT INTO users (userName, password) VALUES (?, ?)';
+    const [results] = await pool.execute(query, [userName, hashedPassword]);
+    return results;
+}
+
+async function login(userName, password) {
+    const hashedPassword = hashPassword(password);
+    const query = 'SELECT * FROM users WHERE userName = ? AND password = ?';
+    const [results] = await pool.execute(query, [userName, hashedPassword]);
+    
+    if (results.length === 0) {
+        throw new Error('Helytelen felhasználónév vagy jelszó');
+    }
+    
+    return results[0];
 }
 
 async function insertQuestion(question, difficulty) { 
@@ -38,10 +61,25 @@ async function insertAnswer(questionId, answer1, answer2, answer3, answer4, isCo
     await pool.execute(query, [nextId++, answer4, questionId, isCorrect === "fourthCorrect" ? 1 : 0]);
 }
 
+async function getQuestions(round) {
+    const query = 'SELECT * FROM kerdesek WHERE nehezseg = ? ORDER BY RAND() LIMIT 1;';
+    const [rows] = await pool.execute(query, [round]);
+    return rows[0];
+}
+
+async function getAnswers(questionId) {
+    const query = 'SELECT * FROM valaszok WHERE kid = ?;';
+    const [rows] = await pool.execute(query, [questionId]);
+    return rows;
+}
 
 //!Export
 module.exports = {
     selectall,
+    register,
+    login,
     insertQuestion,
-    insertAnswer
+    insertAnswer,
+    getQuestions,
+    getAnswers
 };

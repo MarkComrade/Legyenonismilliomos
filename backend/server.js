@@ -11,12 +11,13 @@ const ip = '127.0.0.1';
 const port = 3000;
 
 app.use(express.json()); //?Middleware JSON
+app.use(express.urlencoded({ extended: true }));
 app.set('trust proxy', 1); //?Middleware Proxy
 
 //!Session beállítása:
 app.use(
     session({
-        secret: 'titkos_kulcs', //?Ezt generálni kell a későbbiekben
+        secret: 'titkos_kulcs',
         resave: false,
         saveUninitialized: true
     })
@@ -25,6 +26,10 @@ app.use(
 //!Routing
 //?Főoldal:
 router.get('/', (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/html/index.html'));
+});
+
+router.get('/index.html', (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/html/index.html'));
 });
 
@@ -38,6 +43,10 @@ router.get('/login.html', (request, response) => {
 
 router.get('/game.html', (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/html/game.html'));
+});
+
+router.get('/register.html', (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/html/register.html'));
 });
 
 //!API endpoints
