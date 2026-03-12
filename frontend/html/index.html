@@ -12,27 +12,14 @@
         <script src="../javascript/index.js"></script>
     </head>
     <body>
-        <div class="container-fluid">
-            <div class="row text-center">
-                <h1 class="display-1" style="margin-bottom: 50px;">Legyen ön is milliomos főoldal</h1>
-            </div>
-
-            <div class="row justify-content-center">
-                <div class="col-md-6 text-center" id="loginContainer" style="display: block;">
-                    <button id="loginBtn" class="btn btn-primary btn-lg">Bejelentkezés</button>
-                    <button id="registerBtn" class="btn btn-secondary btn-lg">Regisztráció</button>
+        <div class="container-fluid ibg">
+            <div class="d-flex row justify-content-center align-text-center admin">
+                <h1 class="display-1 cim">Jusson ki ön is a putriból</h1>
+                <div class="d-flex flex-column col-sm-10 col-md-4">
+                    <input type="button" id="loginBtn" class="ibtn btn m-3 rounded-3 p-3" value="Bejelentkezés">
+                    <input type="button" id="gameBtn" class="ibtn btn m-3 rounded-3 p-3" hidden value="Indítás">
+                    <input type="button" id="adminBtn" class="ibtn btn m-3 rounded-3 p-3" value="Admin">
                 </div>
-            </div>
-        </div>
-        
-        <div id="gameContainer" class="container mt-5" style="display: none;">
-            <div class="row justify-content-center">
-                <div class="col-md-8 text-center" style="display: flex; max-width: 300px; flex-direction: column;">
-                    <h2>Üdvözlünk <span id="userName"></span>!</h2>
-                    <button id="startGameBtn" style="margin: 10px;" class="btn btn-success btn-lg">Játék kezdése</button>
-                    <button id="logoutBtn" style="margin: 10px;" class="btn btn-danger btn-lg">Kijelentkezés</button>
-                </div>
-                <input type="button" id="adminBtn" value="Admin" style="display: none;" class="btn btn-warning btn-lg mt-3" />
             </div>
         </div>
     </body>

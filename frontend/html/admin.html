@@ -10,19 +10,19 @@
         <script src="../bootstrap/js/bootstrap.min.js"></script>
 
         <script src="../javascript/postGet.js"></script>
-        <script src="../javascript/admin.js"></script>
+        <link rel="stylesheet" href="../css/index.css" />
     </head>
     <body>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-12">Admin</div>
+        <div class="d-flex flex-column container-fluid  ibg">
+            <div class="d-flex row justify-content-center align-text-center">
+                <h1 class="display-1 cim">Admin</h1>
             </div>
 
-            <div class="row">
-                <div class="col-sm-12">
-                    <p>Kérdés hozzáadása</p>
+            <div class="d-flex row justify-content-center">
+                <div class="col-sm-10 col-md-4">
+                    <h2 class="cim2">Kérdés hozzáadása</h2>
 
-                    <form id="questionForm">
+                    <form id="questionForm" class="d-flex flex-column form-control formd">
                         <label for="questionBody">Adja meg az új kérdést</label>
                         <input type="text" id="questionBody" />
 
@@ -62,6 +62,7 @@
 
                         <input type="button" id="submitBtn" value="Kérdés hozzáadása"/>
                     </form>
+                    <input type="button" id="deleteBtn" value="Kérdés törlése" class="back"/>
                 </div>
             </div>
         </div>
