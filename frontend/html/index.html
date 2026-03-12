@@ -9,18 +9,27 @@
         <script src="../bootstrap/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="../css/index.css" />
         <script src="../javascript/postGet.js"></script>
-        <script src="../javascript/index.js"></script>
     </head>
     <body>
         <div class="container-fluid ibg">
             <div class="d-flex row justify-content-center align-text-center admin">
                 <h1 class="display-1 cim">Jusson ki ön is a putriból</h1>
-                <div class="d-flex flex-column col-sm-10 col-md-4">
+                
+                <!-- Nincs bejelentkezve -->
+                <div id="notLoggedIn" class="flex-column col-sm-10 col-md-4">
                     <input type="button" id="loginBtn" class="ibtn btn m-3 rounded-3 p-3" value="Bejelentkezés">
-                    <input type="button" id="gameBtn" class="ibtn btn m-3 rounded-3 p-3" hidden value="Indítás">
+                    <input type="button" id="registerBtn" class="ibtn btn m-3 rounded-3 p-3" value="Regisztráció">
+                </div>
+
+                <!-- Bejelentkezve -->
+                <div id="loggedIn" class="flex-column col-sm-10 col-md-4" style="display: none;">
+                    <input type="button" id="gameBtn" class="ibtn btn m-3 rounded-3 p-3" value="Játék indítása">
                     <input type="button" id="adminBtn" class="ibtn btn m-3 rounded-3 p-3" value="Admin">
+                    <input type="button" id="logoutBtn" class="ibtn btn m-3 rounded-3 p-3" value="Kijelentkezés">
                 </div>
             </div>
         </div>
+
+        <script src="../javascript/index.js"></script>
     </body>
 </html>
