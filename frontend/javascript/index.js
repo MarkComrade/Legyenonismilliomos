@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginContainer = document.getElementById('loginContainer');
     const gameContainer = document.getElementById('gameContainer');
     const userNameSpan = document.getElementById('userName');
+    const adminBtn = document.getElementById('adminBtn');
 
     loginBtn.addEventListener('click', () => {
         window.location.href = 'login.html';
@@ -20,25 +21,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     logoutBtn.addEventListener('click', async () => {
-        await fetch('/api/logout', {
-            method: 'GET',
-            credentials: 'include'
-        });
-        location.reload();
+        try {
+            await getMethodFetch('/api/logout');
+            location.reload();
+        } catch (error) {
+            console.error('Hiba:', error);
+        }
     });
+
+    if (adminBtn) {
+        adminBtn.addEventListener('click', () => {
+            window.location.href = 'admin.html';
+        });
+    }
 
     async function checkSession() {
         try {
-            const response = await fetch('/api/check-session', {
-                credentials: 'include'
-            });
-            const data = await response.json();
+            const data = await getMethodFetch('/api/check-session');
             console.log(data);
             
             if (data.loggedIn) {
                 loginContainer.style.display = 'none';
                 gameContainer.style.display = 'block';
                 userNameSpan.textContent = data.userName;
+
+                if (data.role === 'admin' && adminBtn) {
+                    adminBtn.style.display = 'block';
+                }
             } else {
                 loginContainer.style.display = 'block';
                 gameContainer.style.display = 'none';

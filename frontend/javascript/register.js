@@ -11,17 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const password = document.getElementById("password").value;
 
         try {
-            const response = await fetch("/api/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userName, password })
-            });
-
-            const data = await response.json();
+            const data = await postMethodFetch("/api/register", { userName, password });
 
             if (data.success) {
                 messageDiv.textContent = "Sikeres regisztráció!";
-                setTimeout(() => window.location.href = "login.html", 1500);
+                setTimeout(() => window.location.href = "login.html", 1000);
             } else {
                 messageDiv.textContent = data.message;
             }
