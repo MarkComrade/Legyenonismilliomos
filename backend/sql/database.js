@@ -61,10 +61,25 @@ async function insertAnswer(questionId, answer1, answer2, answer3, answer4, isCo
     await pool.execute(query, [nextId++, answer4, questionId, isCorrect === "fourthCorrect" ? 1 : 0]);
 }
 
+async function getQuestions(round) {
+    const query = 'SELECT * FROM kerdesek WHERE nehezseg = ? ORDER BY RAND() LIMIT 1;';
+    const [rows] = await pool.execute(query, [round]);
+    return rows[0];
+}
+
+async function getAnswers(questionId) {
+    const query = 'SELECT * FROM valaszok WHERE kid = ?;';
+    const [rows] = await pool.execute(query, [questionId]);
+    return rows;
+}
+
+//!Export
 module.exports = {
     selectall,
     register,
     login,
     insertQuestion,
-    insertAnswer
+    insertAnswer,
+    getQuestions,
+    getAnswers
 };
