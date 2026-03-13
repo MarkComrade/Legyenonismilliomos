@@ -73,7 +73,6 @@ async function getAnswers(questionId) {
     return rows;
 }
 
-//!Export
 module.exports = {
     selectall,
     register,

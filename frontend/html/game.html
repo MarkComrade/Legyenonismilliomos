@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Játék</title>
-
-    <script src="../javascript/game.js"></script>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
+    <script src="../bootstrap/js/popper.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../css/index.css" />
+    <script src="../javascript/postGet.js"></script>
     <script src="../javascript/game.js"></script>
 </head>
 <body>
-    <div class="container-fluid">
+    <div class="container-fluid mt-4">
         <div class="row">
-            <div class="col-sm-2" id="prizeDiv">
+            <div class="col-md-3" id="prizeDiv">
                 <div class="row">
                     <div class="col-sm-12">
                         <span id="questionNumber">15</span>
@@ -103,32 +106,31 @@
                         25 000 Ft
                     </div>
                 </div>
+            </div>
         </div>
 
-    <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-10">
-                <h1 id="questionBody">
+            <div class="col-md-9 text-center">
+                <div class="row mb-5">
+                    <div class="col-sm-12">
+                        <h1 id="questionBody" class="display-4"></h1>
+                    </div>
+                </div>
 
-                </h1>
-            </div>
-        </div>
-
-        <div class="row" id="answers">
-            <div class="col-sm-4">
-                <button id="answer1" class="btn btn-primary btn-lg btn-block"></button>
-            </div>
-
-            <div class="col-sm-4">
-                <button id="answer2" class="btn btn-primary btn-lg btn-block"></button>
-            </div>
-
-            <div class="col-sm-4">
-                <button id="answer3" class="btn btn-primary btn-lg btn-block"></button>
-            </div>
-
-            <div class="col-sm-4">
-                <button id="answer4" class="btn btn-primary btn-lg btn-block"></button>
+                <div class="row" id="answers">
+                    <div class="col-sm-6 mb-3">
+                        <button id="answer1" class="btn btn-primary btn-lg w-100"></button>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <button id="answer2" class="btn btn-primary btn-lg w-100"></button>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <button id="answer3" class="btn btn-primary btn-lg w-100"></button>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <button id="answer4" class="btn btn-primary btn-lg w-100"></button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

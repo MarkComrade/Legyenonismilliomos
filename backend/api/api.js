@@ -136,8 +136,14 @@ router.post('/updateGameState', async (request, response) => {
 
 router.get('/getQuestion', async (request, response) => { 
     try { 
-        const question = await database.getQuestion(request.session.round);
+        if (!request.session.round) {
+            request.session.round = 1;
+            request.session.money = 0;
+        }
+
+        const question = await database.getQuestions(request.session.round);
         const answers = await database.getAnswers(question.id);
+        
         response.status(200).json({
             question,
             answers
@@ -148,7 +154,5 @@ router.get('/getQuestion', async (request, response) => {
         });
     }
 });
-
-
 
 module.exports = router;
