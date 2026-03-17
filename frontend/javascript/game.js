@@ -1,3 +1,5 @@
+let currentRound = 1;
+
 document.addEventListener('DOMContentLoaded', () => {
     getMethodFetch('/api/getQuestion')
         .then((data) => {
@@ -16,10 +18,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-const loadQuestion = async (data) => {
-    window.currentRound = data.question.nehezseg;
-    const questionElement = document.getElementById('questionBody');
+const highlightLevel = (level) => {
+    for (let i = 1; i <= 15; i++) {
+        const levelDiv = document.getElementById(`level${i}`);
+        if (levelDiv) {
+            levelDiv.style.border = 'none';
+            levelDiv.style.backgroundColor = 'transparent';
+            levelDiv.style.borderRadius = '0';
+        }
+    }
+    
+    const currentLevelDiv = document.getElementById(`level${level}`);
+    if (currentLevelDiv) {
+        currentLevelDiv.style.border = '2px solid blue';
+        currentLevelDiv.style.borderRadius = '8px';
+    }
+};
 
+const loadQuestion = async (data) => {
+    currentRound = data.question.nehezseg;
+    highlightLevel(currentRound);
+
+    const questionElement = document.getElementById('questionBody');
     questionElement.textContent = data.question.kerdes;
 
     data.answers.forEach((answer, index) => {
@@ -34,22 +54,33 @@ const loadQuestion = async (data) => {
 
 const checkAnswer = async (answer) => {
     if (answer.helyes == 1) {
-        window.currentRound++;
+        currentRound++;
         
-        if (window.currentRound > 15) {
-            showEndScreen('Gratulálok, megnyerted a főnyereményt: 150 000 000 Ft!', 150000000, 15);
+        if (currentRound > 15) {
+            showEndScreen('Kijutottál a puttonyból: 150 000 000 Ft!', 150000000, 15);
             return;
         }
 
         try {
-            await postMethodFetch('/api/updateGameState', { round: window.currentRound, money: 0 });
+            await postMethodFetch('/api/updateGameState', { round: currentRound, money: 0 });
             const data = await getMethodFetch('/api/getQuestion');
             loadQuestion(data);
         } catch (error) {
             console.error(error);
         }
     } else {
-        showEndScreen('Sajnos a válasz helytelen. Vesztettél! Nyereményed: 0 Ft', 0, window.currentRound - 1);
+        let money = 0;
+        let nyeremeny = "0 Ft";
+        
+        if (currentRound > 10) {
+            money = 5000000;
+            nyeremeny = "5 000 000 Ft";
+        } else if (currentRound > 5) {
+            money = 300000;
+            nyeremeny = "300 000 Ft";
+        }
+
+        showEndScreen(`Lefőttél! Nyereményed: ${nyeremeny}`, money, currentRound - 1);
     }
 };
 
