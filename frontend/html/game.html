@@ -12,7 +12,13 @@
     <script src="../javascript/game.js"></script>
 </head>
 <body>
-    <div class="container-fluid mt-4">
+    <div id="endGameScreen" class="text-center" style="display: none; background-color: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 15px; border: 2px solid black; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; width: 80%; max-width: 600px;">
+        <h2 id="endGameMessage" class="mb-4"></h2>
+        <button id="backToMainBtn" class="btn btn-secondary btn-lg m-2">Vissza a főoldalra</button>
+        <button id="newGameBtn" class="btn btn-primary btn-lg m-2">Új játék</button>
+    </div>
+
+    <div class="container-fluid mt-4" id="mainGameContainer">
         <div class="row">
             <div class="col-md-3" id="prizeDiv">
                 <div class="row">

@@ -40,6 +40,38 @@ async function login(userName, password) {
     return results[0];
 }
 
+async function updateStats(userId, money, level) {
+    const selectQuery = 'SELECT total_money, max_level FROM users WHERE id = ?';
+    const [rows] = await pool.execute(selectQuery, [userId]);
+    
+    let currentMoney = rows[0].total_money;
+    let currentLevel = rows[0].max_level;
+
+    if (currentMoney == null) {
+        currentMoney = 0;
+    }
+    
+    if (currentLevel == null) {
+        currentLevel = 0;
+    }
+
+    let newMoney = currentMoney + money;
+    let newLevel = currentLevel;
+    
+    if (level > currentLevel) {
+        newLevel = level;
+    }
+
+    const updateQuery = 'UPDATE users SET total_money = ?, max_level = ? WHERE id = ?';
+    await pool.execute(updateQuery, [newMoney, newLevel, userId]);
+}
+
+async function getStats(userId) {
+    const query = 'SELECT total_money, max_level FROM users WHERE id = ?';
+    const [results] = await pool.execute(query, [userId]);
+    return results[0];
+}
+
 async function insertQuestion(question, difficulty) { 
     const [lastKerdesId] = await pool.execute('SELECT MAX(id) AS maxId FROM kerdesek;');
     let questionId = (lastKerdesId[0].maxId) + 1;
@@ -77,6 +109,8 @@ module.exports = {
     selectall,
     register,
     login,
+    updateStats,
+    getStats,
     insertQuestion,
     insertAnswer,
     getQuestions,

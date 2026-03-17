@@ -28,6 +28,8 @@ CREATE TABLE users(
 	`id` INT AUTO_INCREMENT PRIMARY KEY,
 	`username` VARCHAR(255) NOT NULL,
 	`password` VARCHAR(255) NOT NULL,
+	`total_money` INT DEFAULT 0,
+	`max_level` INT DEFAULT 0,
 	`role` VARCHAR(255) DEFAULT 'user'
 );
 

@@ -155,4 +155,43 @@ router.get('/getQuestion', async (request, response) => {
     }
 });
 
+router.post('/endGame', async (request, response) => {
+    try {
+        const { money, level } = request.body;
+        if (request.session.userId) {
+            await database.updateStats(request.session.userId, money, level);
+        }
+        request.session.round = 1;
+        request.session.money = 0;
+        response.status(200).json({
+            message: 'Statisztika frissítve.'
+        });
+    } catch (error) {
+        response.status(500).json({
+            message: 'Hiba történt a statisztika mentésekor.'
+        });
+    }
+});
+
+router.get('/getUserStats', async (request, response) => {
+    try {
+        if (request.session.userId) {
+            const stats = await database.getStats(request.session.userId);
+            response.status(200).json({
+                loggedIn: true,
+                total_money: stats.total_money || 0,
+                max_level: stats.max_level || 0
+            });
+        } else {
+            response.status(200).json({
+                loggedIn: false
+            });
+        }
+    } catch (error) {
+        response.status(500).json({
+            message: 'Hiba történt a statisztika lekérésekor.'
+        });
+    }
+});
+
 module.exports = router;

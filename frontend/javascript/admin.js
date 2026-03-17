@@ -27,4 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(`Hiba történt: ${error.message}`);
             });
     });
+
+    document.getElementById('backBtn').addEventListener('click', () => {
+        window.location.href = 'index.html';
+    });
 });

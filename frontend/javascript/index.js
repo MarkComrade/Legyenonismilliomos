@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutBtn = document.getElementById('logoutBtn');
     const notLoggedIn = document.getElementById('notLoggedIn');
     const loggedIn = document.getElementById('loggedIn');
-    const welcomeText = document.getElementById('welcomeText');
     const adminBtn = document.getElementById('adminBtn');
 
     loginBtn.addEventListener('click', () => {
@@ -43,14 +42,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 notLoggedIn.style.display = 'none';
                 loggedIn.style.display = 'flex';
 
-                welcomeText.textContent = "Üdv, " + data.userName + "!";
-
                 if (data.role !== 'admin' && adminBtn) {
                     adminBtn.style.display = 'none';
                 }
+
+                const statsData = await getMethodFetch('/api/getUserStats');
+                if (statsData.loggedIn) {
+                    document.getElementById('totalMoney').textContent = statsData.total_money;
+                    document.getElementById('maxLevel').textContent = statsData.max_level;
+                    document.getElementById('statsContainer').style.display = 'block';
+                }
+
             } else {
                 notLoggedIn.style.display = 'flex';
                 loggedIn.style.display = 'none';
+                document.getElementById('statsContainer').style.display = 'none';
             }
         } catch (error) {
             console.error('Hiba:', error);
