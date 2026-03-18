@@ -58,6 +58,60 @@ const loadQuestion = async (data) => {
             checkAnswer(answer, currentRound);
         };
     });
+
+    document.getElementById('fiftyFifty').addEventListener('click', (e) => {
+
+        getMethodFetch('/api/getHelpCountSession')
+            .then((helpData) => {
+                if (helpData.fiftyFiftyUsed) {
+                    alert('Ezt a segítséget már használtad!');
+                    return;
+                }
+                else {
+                    helpAnswer(e.target,data.answers)
+                }
+
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    });
+
+    document.getElementById('phoneAFriend').addEventListener('click', (e) => {
+
+        getMethodFetch('/api/getHelpCountSession')
+            .then((helpData) => {
+                if (helpData.phoneAFriendUsed) {
+                    alert('Ezt a segítséget már használtad!');
+                    return;
+                }
+                else {
+                    helpAnswer(e.target,data.answers)
+                }
+
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    });
+
+    document.getElementById('askTheAudience').addEventListener('click', (e) => {
+
+        getMethodFetch('/api/getHelpCountSession')
+        .then((helpData) => {
+            if (helpData.askTheAudienceUsed) {
+                alert('Ezt a segítséget már használtad!');
+                return;
+            }
+            else {
+                helpAnswer(e.target,data.answers)
+            }
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    });
 };
 
 const confirmEnd = async (level) => {
@@ -245,3 +299,81 @@ const showEndScreen = async (message, level, money) => {
         console.error(error);
     }
 };
+
+const helpAnswer = (button,data) => {
+    document.getElementById('fiftyFifty').disabled = true;
+    document.getElementById('phoneAFriend').disabled = true;
+    document.getElementById('askTheAudience').disabled = true;
+
+    switch (button.id) {
+        case 'fiftyFifty':
+            let disableAnswer = 0;
+
+            let j = 0;
+            while (disableAnswer < 2 && j < data.length) {
+                let random = Math.floor(Math.random() * 4);
+                if (data[random].helyes == 0) {
+                    const answerButton = document.getElementById(`answer${random + 1}`);
+                    if (!answerButton.disabled) {
+                        answerButton.disabled = true;
+                        disableAnswer++;
+                    }
+                }
+                j++;
+            }
+            break;
+
+        case 'phoneAFriend':
+            getMethodFetch('/api/getGameState')
+            .then((gameState) => {
+                const currentRound = gameState.round;
+
+                let random = Math.floor(Math.random() * 100) + 1;
+
+
+                let j = 0;
+                while(j < data.length) {
+                    if (data[j].helyes == 1 && random > 0 + (currentRound * 3)) {
+                        const answerButton = document.getElementById(`answer${j + 1}`);
+                        answerButton.style.backgroundColor = 'green';
+                        alert(`A barátod szerint a helyes válasz: ${answerButton.textContent}`);
+                        break;
+                    }
+                    else if (data[j].helyes == 0 && random <= 0 + (currentRound * 3)) {
+                        const answerButton = document.getElementById(`answer${j + Math.floor(Math.random() * 4) + 1}`);
+                        answerButton.style.backgroundColor = 'green';
+                        alert(`A barátod szerint a helyes válasz: ${answerButton.textContent}`);
+                        break;
+                    }
+                    j++;
+                }     
+            })  
+            break;
+        case 'askTheAudience':
+                getMethodFetch('/api/getGameState')
+                .then((gameState) => {
+                    const currentRound = gameState.round;
+
+                    let random = Math.floor(Math.random() * 100) + 1;
+
+                    let j = 0;
+                    while(j < data.length) {
+                        if (data[j].helyes == 1 && random > 0 + (currentRound * 4)) {
+                            const answerButton = document.getElementById(`answer${j + 1}`);
+                            answerButton.style.backgroundColor = 'green';
+                            alert(`A közönség szerint a helyes válasz: ${answerButton.textContent}`);
+                            break;
+                        }
+                        else if (data[j].helyes == 0 && random <= 0 + (currentRound * 4)) {
+                            const answerButton = document.getElementById(`answer${j + Math.floor(Math.random() * 4) + 1}`);
+                            answerButton.style.backgroundColor = 'green';
+                            alert(`A közönség szerint a helyes válasz: ${answerButton.textContent}`);
+                            break;
+                        }
+                        j++;
+                    }
+                })
+            break;
+        default:
+    }
+}
