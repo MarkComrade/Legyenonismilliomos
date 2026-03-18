@@ -145,6 +145,40 @@ html, body {
     font-weight: bold;
 }
 
+.continue-overlay {
+    display: none;
+}
+
+.continue-modal {
+    display: none;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    border: 2px solid black;
+}
+
+.continue-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#continueMessage h4 {
+    margin-bottom: 15px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#continueMessage p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+#continueMessage p:first-of-type {
+    font-size: 18px;
+    font-weight: bold;
 #prizeDiv {
     background: rgba(255,255,255,0.9); 
     padding: 25px; 
@@ -199,6 +233,17 @@ html, body {
     color: whitesmoke;
     border: solid 1px black;
     border-radius: 5px;
+}
+
+#endgameContainer {
+    display: none; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 999; 
 }
 
 #endGameScreen {

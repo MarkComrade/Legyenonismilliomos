@@ -242,4 +242,24 @@ router.get('/getUserStats', async (request, response) => {
     }
 });
 
+router.get('/getGuaranteedMoney', async (request, response) => {
+    try {
+        const level = parseInt(request.query.level);
+        let garantaltNyeremeny = "0 Ft";
+        let money = 0;
+
+        if (level === 5) {
+            garantaltNyeremeny = "300 000 Ft";
+            money = 300000;
+        } else if (level === 10) {
+            garantaltNyeremeny = "5 000 000 Ft";
+            money = 5000000;
+        }
+
+        response.status(200).json({ garantaltNyeremeny, money });
+    } catch (error) {
+        response.status(500).json({ message: error.message });
+    }
+});
+
 module.exports = router;
