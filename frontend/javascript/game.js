@@ -252,13 +252,10 @@ const showEndScreen = async (message, level, money) => {
 };
 
 const helpAnswer = (button,data) => {
-    document.getElementById('fiftyFifty').disabled = true;
-    document.getElementById('phoneAFriend').disabled = true;
-    document.getElementById('askTheAudience').disabled = true;
-
     switch (button.id) {
         case 'fiftyFifty':
             let disableAnswer = 0;
+            document.getElementById('fiftyFifty').disabled = true;
 
             let j = 0;
             while (disableAnswer < 2 && j < data.length) {
@@ -278,6 +275,8 @@ const helpAnswer = (button,data) => {
             getMethodFetch('/api/getGameState')
             .then((gameState) => {
                 const currentRound = gameState.round;
+
+                document.getElementById('phoneAFriend').disabled = true;
 
                 let random = Math.floor(Math.random() * 100) + 1;
 
@@ -304,6 +303,7 @@ const helpAnswer = (button,data) => {
                 getMethodFetch('/api/getGameState')
                 .then((gameState) => {
                     const currentRound = gameState.round;
+                    document.getElementById('askTheAudience').disabled = true;
 
                     let random = Math.floor(Math.random() * 100) + 1;
 
