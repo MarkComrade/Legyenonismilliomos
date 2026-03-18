@@ -61,18 +61,54 @@ const loadQuestion = async (data) => {
 };
 
 const confirmEnd = async (level) => {
-    let garantaltNyeremeny = "0 Ft";
+    const modal = document.getElementById('continueModal');
+    const message = document.getElementById('continueMessage');
     
-    if (level === 5) {
-        garantaltNyeremeny = "300 000 Ft";
-    } else if (level === 10) {
-        garantaltNyeremeny = "5 000 000 Ft";
-    }
+    message.innerHTML = '';
+    
+    try {
+        const response = await getMethodFetch(`/api/getGuaranteedMoney?level=${level}`);
+        const { garantaltNyeremeny, money } = response;
+        
+        document.getElementById('questionBody').style.display = 'none';
+        document.getElementById('answers').style.display = 'none';
+        document.getElementById('takeWinBtn').parentElement.style.display = 'none';
+        
+        const h4 = document.createElement('h4');
+        h4.textContent = 'Biztonsági szint elérve!';
+        message.appendChild(h4);
+        
+        const p1 = document.createElement('p');
+        p1.style.fontSize = '18px';
+        p1.style.fontWeight = 'bold';
+        p1.textContent = `Garantált nyeremény: ${garantaltNyeremeny}`;
+        message.appendChild(p1);
+        
+        const p2 = document.createElement('p');
+        p2.textContent = 'Megállsz, vagy folytatod?';
+        message.appendChild(p2);
+        
+        modal.style.display = 'block';
 
-    const confirmed = confirm(`Bitosan abbahagyod a játekot és elviszed a ${garantaltNyeremeny} nyereményt?`);
-    
-    if (confirmed) {
-        showEndScreen(`Gratulálunk! Nyereményed: ${garantaltNyeremeny}`, level);
+        document.getElementById('continueYesBtn').textContent = 'Megállok';
+        document.getElementById('continueNoBtn').textContent = 'Folytatom';
+
+        document.getElementById('continueYesBtn').onclick = () => {
+            modal.style.display = 'none';
+            document.getElementById('questionBody').style.display = 'block';
+            document.getElementById('answers').style.display = 'flex';
+            document.getElementById('takeWinBtn').parentElement.style.display = 'block';
+            showEndScreen(`Az igen! Nyereményed: ${garantaltNyeremeny}`, level, money);
+        };
+
+        document.getElementById('continueNoBtn').onclick = () => {
+            modal.style.display = 'none';
+            document.getElementById('questionBody').style.display = 'block';
+            document.getElementById('answers').style.display = 'flex';
+            document.getElementById('takeWinBtn').parentElement.style.display = 'block';
+        };
+    } catch (error) {
+        console.error(error);
     }
 };
 
@@ -81,16 +117,20 @@ const checkAnswer = async (answer, currentRound) => {
         const nextRound = currentRound + 1;
         
         if (nextRound > 15) {
-            showEndScreen('Kijutottál a puttonyból: 150 000 000 Ft!', 15);
+            showEndScreen('Kijutottál a puttonyból: 150 000 000 Ft!', 15, 150000000);
             return;
         }
 
-        try {
-            await postMethodFetch('/api/updateGameState', { round: nextRound });
-            const data = await getMethodFetch('/api/getQuestion');
-            loadQuestion(data);
-        } catch (error) {
-            console.error(error);
+        if (currentRound === 5 || currentRound === 10) {
+            try {
+                await postMethodFetch('/api/updateGameState', { round: nextRound });
+                const data = await getMethodFetch('/api/getQuestion');
+                loadQuestion(data);
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            askContinue(currentRound, nextRound);
         }
     } else {
         endGameWithMoney(currentRound);
@@ -115,74 +155,83 @@ const endGameWithMoney = async (level) => {
     showEndScreen(`Lefőttél! Nyereményed: ${nyeremeny}`, level, money);
 };
 
-const askContinue = async (currentRound) => {
-    let nyeremeny = "0 Ft";
-    
-    if (currentRound === 5) {
-        nyeremeny = "300 000 Ft";
-    } else if (currentRound === 10) {
-        nyeremeny = "5 000 000 Ft";
-    } else {
-        const prevMoney = getPrevLevelMoney(currentRound - 1);
-        nyeremeny = prevMoney;
-    }
+const askContinue = async (currentRound, nextRound) => {
+    const nyeremeny = getPrevLevelMoney(currentRound);
+    const moneyAmount = getPrevLevelMoneyAmount(currentRound);
 
-    const confirmed = confirm(`Jól válaszoltál! Nyereményed: ${nyeremeny}\n\nTovábblépel a ${currentRound + 1}. szintre?`);
+    document.getElementById('questionBody').style.display = 'none';
+    document.getElementById('answers').style.display = 'none';
+
+    const modal = document.getElementById('continueModal');
+    const message = document.getElementById('continueMessage');
     
-    if (confirmed) {
+    message.innerHTML = '';
+    
+    const h4 = document.createElement('h4');
+    h4.textContent = 'Jól válaszoltál!';
+    message.appendChild(h4);
+    
+    const p1 = document.createElement('p');
+    p1.style.fontSize = '18px';
+    p1.style.fontWeight = 'bold';
+    p1.textContent = `Nyereményed: ${nyeremeny}`;
+    message.appendChild(p1);
+    
+    const p2 = document.createElement('p');
+    p2.textContent = `Továbblépsz a ${nextRound}. szintre?`;
+    message.appendChild(p2);
+    
+    modal.style.display = 'block';
+
+    document.getElementById('continueYesBtn').textContent = 'Továbblépek';
+    document.getElementById('continueNoBtn').textContent = 'Megállok';
+
+    document.getElementById('continueYesBtn').onclick = async () => {
+        modal.style.display = 'none';
+        document.getElementById('questionBody').style.display = 'block';
+        document.getElementById('answers').style.display = 'flex';
+        
         try {
-            await postMethodFetch('/api/updateGameState', { round: currentRound + 1 });
+            await postMethodFetch('/api/updateGameState', { round: nextRound });
             const data = await getMethodFetch('/api/getQuestion');
             loadQuestion(data);
         } catch (error) {
             console.error(error);
         }
-    } else {
-        showEndScreen(`Gratulálunk! Nyereményed: ${nyeremeny}`, currentRound, getPrevLevelMoneyAmount(currentRound - 1));
-    }
+    };
+
+    document.getElementById('continueNoBtn').onclick = () => {
+        modal.style.display = 'none';
+        document.getElementById('questionBody').style.display = 'block';
+        document.getElementById('answers').style.display = 'flex';
+        showEndScreen(`Azigen! Nyereményed: ${nyeremeny}`, currentRound, moneyAmount);
+    };
 };
 
 const getPrevLevelMoney = (level) => {
     const moneys = {
-        1: "0 Ft",
-        2: "500 Ft",
-        3: "1 000 Ft",
-        4: "2 000 Ft",
+        1: "25 000 Ft",
+        2: "50 000 Ft",
+        3: "100 000 Ft",
+        4: "200 000 Ft",
         5: "300 000 Ft",
-        6: "5 000 Ft",
-        7: "10 000 Ft",
-        8: "20 000 Ft",
-        9: "50 000 Ft",
+        6: "500 000 Ft",
+        7: "1 000 000 Ft",
+        8: "2 000 000 Ft",
+        9: "3 000 000 Ft",
         10: "5 000 000 Ft",
-        11: "100 000 Ft",
-        12: "500 000 Ft",
-        13: "1 000 000 Ft",
-        14: "25 000 000 Ft",
+        11: "10 000 000 Ft",
+        12: "25 000 000 Ft",
+        13: "50 000 000 Ft",
+        14: "85 000 000 Ft",
         15: "150 000 000 Ft"
     };
     return moneys[level] || "0 Ft";
 };
 
 const getPrevLevelMoneyAmount = (level) => {
-    const moneys = [0, 0, 500, 1000, 2000, 300000, 5000, 10000, 20000, 50000, 5000000, 100000, 500000, 1000000, 25000000, 150000000];
+    const moneys = [0, 25000, 50000, 100000, 200000, 300000, 500000, 1000000, 2000000, 3000000, 5000000, 10000000, 25000000, 50000000, 85000000, 150000000];
     return moneys[level] || 0;
-};
-
-const confirmQuit = async (level) => {
-    let garantaltNyeremeny = "0 Ft";
-    
-    if (level === 5) {
-        garantaltNyeremeny = "300 000 Ft";
-    } else if (level === 10) {
-        garantaltNyeremeny = "5 000 000 Ft";
-    }
-
-    const confirmed = confirm(`Biztosan abbahagyod a játékot és elviszed a garantált ${garantaltNyeremeny} nyereményt?`);
-    
-    if (confirmed) {
-        const money = level === 5 ? 300000 : level === 10 ? 5000000 : 0;
-        showEndScreen(`Gratulálunk! Nyereményed: ${garantaltNyeremeny}`, level, money);
-    }
 };
 
 const showEndScreen = async (message, level, money) => {
