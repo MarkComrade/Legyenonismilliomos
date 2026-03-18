@@ -1,5 +1,3 @@
-let currentRound = 1;
-
 document.addEventListener('DOMContentLoaded', () => {
     getMethodFetch('/api/getQuestion')
         .then((data) => {
@@ -42,57 +40,158 @@ const loadQuestion = async (data) => {
     const questionElement = document.getElementById('questionBody');
     questionElement.textContent = data.question.kerdes;
 
+    const takeWinBtn = document.getElementById('takeWinBtn');
+    if (currentRound === 5 || currentRound === 10) {
+        takeWinBtn.parentElement.style.display = 'block';
+        takeWinBtn.onclick = () => {
+            confirmEnd(currentRound);
+        };
+    } else {
+        takeWinBtn.parentElement.style.display = 'none';
+    }
+
     data.answers.forEach((answer, index) => {
         const answerButton = document.getElementById(`answer${index + 1}`);
         answerButton.textContent = answer.valasz;
 
         answerButton.onclick = () => {
-            checkAnswer(answer);
+            checkAnswer(answer, currentRound);
         };
     });
 };
 
-const checkAnswer = async (answer) => {
+const confirmEnd = async (level) => {
+    let garantaltNyeremeny = "0 Ft";
+    
+    if (level === 5) {
+        garantaltNyeremeny = "300 000 Ft";
+    } else if (level === 10) {
+        garantaltNyeremeny = "5 000 000 Ft";
+    }
+
+    const confirmed = confirm(`Bitosan abbahagyod a játekot és elviszed a ${garantaltNyeremeny} nyereményt?`);
+    
+    if (confirmed) {
+        showEndScreen(`Gratulálunk! Nyereményed: ${garantaltNyeremeny}`, level);
+    }
+};
+
+const checkAnswer = async (answer, currentRound) => {
     if (answer.helyes == 1) {
-        currentRound++;
+        const nextRound = currentRound + 1;
         
-        if (currentRound > 15) {
-            showEndScreen('Kijutottál a puttonyból: 150 000 000 Ft!', 150000000, 15);
+        if (nextRound > 15) {
+            showEndScreen('Kijutottál a puttonyból: 150 000 000 Ft!', 15);
             return;
         }
 
         try {
-            await postMethodFetch('/api/updateGameState', { round: currentRound, money: 0 });
+            await postMethodFetch('/api/updateGameState', { round: nextRound });
             const data = await getMethodFetch('/api/getQuestion');
             loadQuestion(data);
         } catch (error) {
             console.error(error);
         }
     } else {
-        let money = 0;
-        let nyeremeny = "0 Ft";
-        
-        if (currentRound > 10) {
-            money = 5000000;
-            nyeremeny = "5 000 000 Ft";
-        } else if (currentRound > 5) {
-            money = 300000;
-            nyeremeny = "300 000 Ft";
-        }
-
-        showEndScreen(`Lefőttél! Nyereményed: ${nyeremeny}`, money, currentRound - 1);
+        endGameWithMoney(currentRound);
     }
 };
 
-const showEndScreen = async (message, money, level) => {
-    document.getElementById('mainGameContainer').style.display = 'none';
+const endGameWithMoney = async (level) => {
+    let money = 0;
+    let nyeremeny = "0 Ft";
     
-    const endScreen = document.getElementById('endGameScreen');
+    if (level > 10) {
+        money = 5000000;
+        nyeremeny = "5 000 000 Ft";
+    } else if (level > 5) {
+        money = 300000;
+        nyeremeny = "300 000 Ft";
+    } else {
+        money = 0;
+        nyeremeny = "0 Ft";
+    }
+
+    showEndScreen(`Lefőttél! Nyereményed: ${nyeremeny}`, level, money);
+};
+
+const askContinue = async (currentRound) => {
+    let nyeremeny = "0 Ft";
+    
+    if (currentRound === 5) {
+        nyeremeny = "300 000 Ft";
+    } else if (currentRound === 10) {
+        nyeremeny = "5 000 000 Ft";
+    } else {
+        const prevMoney = getPrevLevelMoney(currentRound - 1);
+        nyeremeny = prevMoney;
+    }
+
+    const confirmed = confirm(`Jól válaszoltál! Nyereményed: ${nyeremeny}\n\nTovábblépel a ${currentRound + 1}. szintre?`);
+    
+    if (confirmed) {
+        try {
+            await postMethodFetch('/api/updateGameState', { round: currentRound + 1 });
+            const data = await getMethodFetch('/api/getQuestion');
+            loadQuestion(data);
+        } catch (error) {
+            console.error(error);
+        }
+    } else {
+        showEndScreen(`Gratulálunk! Nyereményed: ${nyeremeny}`, currentRound, getPrevLevelMoneyAmount(currentRound - 1));
+    }
+};
+
+const getPrevLevelMoney = (level) => {
+    const moneys = {
+        1: "0 Ft",
+        2: "500 Ft",
+        3: "1 000 Ft",
+        4: "2 000 Ft",
+        5: "300 000 Ft",
+        6: "5 000 Ft",
+        7: "10 000 Ft",
+        8: "20 000 Ft",
+        9: "50 000 Ft",
+        10: "5 000 000 Ft",
+        11: "100 000 Ft",
+        12: "500 000 Ft",
+        13: "1 000 000 Ft",
+        14: "25 000 000 Ft",
+        15: "150 000 000 Ft"
+    };
+    return moneys[level] || "0 Ft";
+};
+
+const getPrevLevelMoneyAmount = (level) => {
+    const moneys = [0, 0, 500, 1000, 2000, 300000, 5000, 10000, 20000, 50000, 5000000, 100000, 500000, 1000000, 25000000, 150000000];
+    return moneys[level] || 0;
+};
+
+const confirmQuit = async (level) => {
+    let garantaltNyeremeny = "0 Ft";
+    
+    if (level === 5) {
+        garantaltNyeremeny = "300 000 Ft";
+    } else if (level === 10) {
+        garantaltNyeremeny = "5 000 000 Ft";
+    }
+
+    const confirmed = confirm(`Biztosan abbahagyod a játékot és elviszed a garantált ${garantaltNyeremeny} nyereményt?`);
+    
+    if (confirmed) {
+        const money = level === 5 ? 300000 : level === 10 ? 5000000 : 0;
+        showEndScreen(`Gratulálunk! Nyereményed: ${garantaltNyeremeny}`, level, money);
+    }
+};
+
+const showEndScreen = async (message, level, money) => {
+    document.getElementById('mainGameContainer').style.display = 'none';
     document.getElementById('endGameMessage').textContent = message;
-    endScreen.style.display = 'block';
+    document.getElementById('endGameScreen').style.display = 'block';
 
     try {
-        await postMethodFetch('/api/endGame', { money: money, level: level });
+        await postMethodFetch('/api/endGame', { level: level, money: money });
     } catch (error) {
         console.error(error);
     }
