@@ -121,11 +121,19 @@ const loadQuestion = async (data) => {
         }
     });
 
+    const fiftyBtn = document.getElementById('fiftyFifty');
+    const phoneBtn = document.getElementById('phoneAFriend');
+    const askBtn = document.getElementById('askTheAudience');
+
+    if (fiftyBtn) fiftyBtn.disabled = false;
+    if (phoneBtn) phoneBtn.disabled = false;
+    if (askBtn) askBtn.disabled = false;
+
     try {
         const helpState = await getMethodFetch('/api/getHelpState');
-        if (helpState.fiftyFifty) document.getElementById('fiftyFifty').disabled = true;
-        if (helpState.phoneAFriend) document.getElementById('phoneAFriend').disabled = true;
-        if (helpState.askTheAudience) document.getElementById('askTheAudience').disabled = true;
+        if (helpState.fiftyFifty && fiftyBtn) fiftyBtn.disabled = true;
+        if (helpState.phoneAFriend && phoneBtn) phoneBtn.disabled = true;
+        if (helpState.askTheAudience && askBtn) askBtn.disabled = true;
     } catch (error) {
         console.error(error);
     }
