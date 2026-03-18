@@ -262,4 +262,14 @@ router.get('/getGuaranteedMoney', async (request, response) => {
     }
 });
 
+router.post('/resetGame', async (request, response) => {
+    try {
+        request.session.round = 1;
+        request.session.money = 0;
+        response.status(200).json({ success: true });
+    } catch (error) {
+        response.status(500).json({ success: false, message: error.message });
+    }
+});
+
 module.exports = router;
