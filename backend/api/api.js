@@ -134,6 +134,41 @@ router.post('/updateGameState', async (request, response) => {
     }
 });
 
+router.get('/getHelpCountSession', async (request, response) => { 
+    try { 
+        response.status(200).json({
+            fiftyFiftyUsed: request.session.fiftyFiftyUsed || false,
+            phoneAFriendUsed: request.session.phoneAFriendUsed || false,
+            askTheAudienceUsed: request.session.askTheAudienceUsed || false
+        });
+    }
+    catch (error) {
+        response.status(500).json({
+            message: 'Hiba történt a segítségek lekérésekor.'
+        });
+    }
+});
+
+router.post('/useHelp', async (request, response) => {
+    try {
+        const { helpType } = request.body;
+        if (helpType === 'fiftyFifty') {
+            request.session.fiftyFiftyUsed = true;
+        } else if (helpType === 'phoneAFriend') {
+            request.session.phoneAFriendUsed = true;
+        } else if (helpType === 'askTheAudience') {
+            request.session.askTheAudienceUsed = true;
+        }
+        response.status(200).json({
+            message: `${helpType} használva.`
+        });
+    } catch (error) {
+        response.status(500).json({
+            message: 'Hiba történt a segítség használatakor.'
+        });
+    }
+});
+
 router.get('/getQuestion', async (request, response) => { 
     try { 
         if (!request.session.round) {
