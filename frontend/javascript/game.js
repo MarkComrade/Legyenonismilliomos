@@ -50,6 +50,60 @@ const loadQuestion = async (data) => {
             checkAnswer(answer);
         };
     });
+
+    document.getElementById('fiftyFifty').addEventListener('click', (e) => {
+
+        getMethodFetch('/api/getHelpCountSession')
+            .then((helpData) => {
+                if (helpData.fiftyFiftyUsed) {
+                    alert('Ezt a segítséget már használtad!');
+                    return;
+                }
+                else {
+                    helpAnswer(e.target,data.answers)
+                }
+
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    });
+
+    document.getElementById('phoneAFriend').addEventListener('click', (e) => {
+
+        getMethodFetch('/api/getHelpCountSession')
+            .then((helpData) => {
+                if (helpData.phoneAFriendUsed) {
+                    alert('Ezt a segítséget már használtad!');
+                    return;
+                }
+                else {
+                    helpAnswer(e.target,data.answers)
+                }
+
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    });
+
+    document.getElementById('askTheAudience').addEventListener('click', (e) => {
+
+        getMethodFetch('/api/getHelpCountSession')
+        .then((helpData) => {
+            if (helpData.askTheAudienceUsed) {
+                alert('Ezt a segítséget már használtad!');
+                return;
+            }
+            else {
+                helpAnswer(e.target,data.answers)
+            }
+
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    });
 };
 
 const checkAnswer = async (answer) => {
@@ -97,3 +151,39 @@ const showEndScreen = async (message, money, level) => {
         console.error(error);
     }
 };
+
+const helpAnswer = (button,data) => {
+    document.getElementById('fiftyFifty').disabled = true;
+    document.getElementById('phoneAFriend').disabled = true;
+    document.getElementById('askTheAudience').disabled = true;
+
+    switch (button.id) {
+        case 'fiftyFifty':
+            let disableAnswer = 0;
+
+            for (let i = 0; i < data.length; i++) {
+
+                while(disableAnswer < 2) { 
+                    let random = Math.floor(Math.random() * 4);
+
+                    if (data[i].helyes == 0) {
+                        if (random == i) {
+                            const answerButton = document.getElementById(`answer${i + 1}`);
+                            answerButton.disabled = true;
+                            disableAnswer++;
+                        }
+                    }
+                }
+            }
+            break;
+
+        case 'phoneAFriend':
+            
+
+            break;
+        case 'askTheAudience':
+
+            break;
+        default:
+    }
+}
