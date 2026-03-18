@@ -118,6 +118,19 @@ router.post('/addQuestion', upload.none(), async (request, response) => {
     }
 });
 
+router.get('/getGameState', async (request, response) => {
+    try {
+        response.status(200).json({
+            round: request.session.round,
+            money: request.session.money
+        });
+    } catch (error) {
+        response.status(500).json({
+            message: 'Hiba történt a játék állapotának lekérésekor.',
+        });
+    }
+});
+
 router.post('/updateGameState', async (request, response) => {
     try {
         const { round, money } = request.body;
