@@ -12,109 +12,111 @@
     <script src="../javascript/game.js"></script>
 </head>
 <body>
-    <div id="endGameScreen" class="text-center" style="display: none; background-color: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 15px; border: 2px solid black; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; width: 80%; max-width: 600px;">
-        <h2 id="endGameMessage" class="mb-4"></h2>
-        <button id="backToMainBtn" class="btn btn-secondary btn-lg m-2">Vissza a főoldalra</button>
-        <button id="newGameBtn" class="btn btn-primary btn-lg m-2">Új játék</button>
-    </div>
+    <div class="container-fluid ibg d-flex justify-content-center align-items-center" id="endGameContainer" style="display: none;">
+        <div id="endGameScreen" class="text-center">
+            <h2 id="endGameMessage" class="mb-4"></h2>
+            <button id="backToMainBtn" class="btn btn-lg m-2">Vissza a főoldalra</button>
+            <button id="newGameBtn" class="btn btn-lg m-2">Új játék</button>
+        </div>
+    </div>  
 
-    <div class="container-fluid mt-4" id="mainGameContainer">
+    <div class="container-fluid ibg" id="mainGameContainer">
         <div class="row">
-            <div class="col-md-3" id="prizeDiv">
-                <div class="row">
+            <div class="col-md-2" id="prizeDiv">
+                <div class="row d-flex align-items-evenly">
                     <div class="col-sm-12 p-1" id="level15">
                         <span id="questionNumber">15</span>
-                        150 000 000 Ft
+                        <span id="pemsz">150 000 000 Ft</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 p-1" id="level14">
                         <span id="questionNumber">14</span>
-                        85 000 000 Ft
+                        <span id="pemsz">85 000 000 Ft</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 p-1" id="level13">
                         <span id="questionNumber">13</span>
-                        50 000 000 Ft
+                        <span id="pemsz">50 000 000 Ft</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 p-1" id="level12">
                         <span id="questionNumber">12</span>
-                        25 000 000 Ft
+                        <span id="pemsz">25 000 000 Ft</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 p-1" id="level11">
                         <span id="questionNumber">11</span>
-                        10 000 000 Ft
+                        <span id="pemsz">10 000 000 Ft</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 p-1" id="level10">
                         <span id="questionNumber">10</span>
-                        5 000 000 Ft
+                        <span id="pemsz">5 000 000 Ft</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 p-1" id="level9">
                         <span id="questionNumber">9</span>
-                        3 000 000 Ft
+                        <span id="pemsz">3 000 000 Ft</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 p-1" id="level8">
                         <span id="questionNumber">8</span>
-                        2 000 000 Ft
+                        <span id="pemsz">2 000 000 Ft</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 p-1" id="level7">
                         <span id="questionNumber">7</span>
-                        1 000 000 Ft
+                        <span id="pemsz">1 000 000 Ft</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 p-1" id="level6">
                         <span id="questionNumber">6</span>
-                        500 000 Ft
+                        <span id="pemsz">500 000 Ft</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 p-1" id="level5">
                         <span id="questionNumber">5</span>
-                        300 000 Ft
+                        <span id="pemsz">300 000 Ft</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 p-1" id="level4">
                         <span id="questionNumber">4</span>
-                        200 000 Ft
+                        <span id="pemsz">200 000 Ft</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 p-1" id="level3">
                         <span id="questionNumber">3</span>
-                        100 000 Ft
+                        <span id="pemsz">100 000 Ft</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 p-1" id="level2">
                         <span id="questionNumber">2</span>
-                        50 000 Ft
+                        <span id="pemsz">50 000 Ft</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 p-1" id="level1">
                         <span id="questionNumber">1</span>
-                        25 000 Ft
+                        <span id="pemsz">25 000 Ft</span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-9 text-center">
-                <div class="row mb-5">
+            <div class="col-md-9 text-center gameArea">
+                <div class="row ">
                     <div class="col-sm-12">
                         <h1 id="questionBody" class="display-4"></h1>
                     </div>
@@ -122,16 +124,16 @@
 
                 <div class="row" id="answers">
                     <div class="col-sm-6 mb-3">
-                        <button id="answer1" class="btn btn-primary btn-lg w-100"></button>
+                        <button id="answer1" class="btn valaszBtn"></button>
                     </div>
                     <div class="col-sm-6 mb-3">
-                        <button id="answer2" class="btn btn-primary btn-lg w-100"></button>
+                        <button id="answer2" class="btn valaszBtn"></button>
                     </div>
                     <div class="col-sm-6 mb-3">
-                        <button id="answer3" class="btn btn-primary btn-lg w-100"></button>
+                        <button id="answer3" class="btn valaszBtn"></button>
                     </div>
                     <div class="col-sm-6 mb-3">
-                        <button id="answer4" class="btn btn-primary btn-lg w-100"></button>
+                        <button id="answer4" class="btn valaszBtn"></button>
                     </div>
                 </div>
             </div>
