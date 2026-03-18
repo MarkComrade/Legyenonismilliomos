@@ -134,3 +134,12 @@ html, body {
     border: solid 1px black;
     border-radius: 5px;
 }
+
+#statsContainer{
+    display: none; 
+    background: rgba(255,255,255,0.9); 
+    padding: 15px; 
+    border-radius: 10px; 
+    border: 1px solid black; 
+    font-weight: bold;
+}

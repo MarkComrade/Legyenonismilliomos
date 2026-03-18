@@ -11,15 +11,16 @@
         <script src="../javascript/postGet.js"></script>
     </head>
     <body>
-        <div id="statsContainer" style="display: none; position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.9); padding: 15px; border-radius: 10px; border: 1px solid black; font-weight: bold;">
-            Össz nyeremény: <span id="totalMoney">0</span> Ft<br>
-            Legnagyobb szint: <span id="maxLevel">0</span>
-        </div>
 
         <div class="container-fluid ibg">
             <div class="d-flex row justify-content-center align-text-center admin">
                 <h1 class="display-1 cim">Jusson ki ön is a putriból</h1>
                 
+                <div id="statsContainer">
+                    Össz nyeremény: <span id="totalMoney">0</span> Ft<br>
+                    Legnagyobb szint: <span id="maxLevel">0</span>
+                </div>
+
                 <div id="notLoggedIn" class="flex-column col-sm-10 col-md-4">
                     <input type="button" id="loginBtn" class="ibtn btn m-3 rounded-3 p-3" value="Bejelentkezés">
                     <input type="button" id="registerBtn" class="ibtn btn m-3 rounded-3 p-3" value="Regisztráció">
