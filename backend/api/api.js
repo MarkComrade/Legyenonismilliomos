@@ -162,6 +162,22 @@ router.get('/getHelpCountSession', async (request, response) => {
     }
 });
 
+router.post('/resetHelp', async (request, response) => {
+    try {
+        request.session.fiftyFiftyUsed = false;
+        request.session.phoneAFriendUsed = false;
+        request.session.askTheAudienceUsed = false;
+
+        response.status(200).json({
+            message: 'Segítségek visszaállítva.'
+        });
+    } catch (error) {
+        response.status(500).json({
+            message: 'Hiba történt a segítség használatakor.'
+        });
+    }
+});
+
 router.post('/useHelp', async (request, response) => {
     try {
         const { helpType } = request.body;

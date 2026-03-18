@@ -52,6 +52,8 @@ const loadQuestion = async (data) => {
 
     data.answers.forEach((answer, index) => {
         const answerButton = document.getElementById(`answer${index + 1}`);
+        answerButton.disabled = false;
+        answerButton.removeAttribute('style');
         answerButton.textContent = answer.valasz;
 
         answerButton.onclick = () => {
@@ -59,58 +61,38 @@ const loadQuestion = async (data) => {
         };
     });
 
-    document.getElementById('fiftyFifty').addEventListener('click', (e) => {
+    getMethodFetch('/api/getHelpCountSession')
+    .then((helpData) => {
+        document.getElementById('fiftyFifty').disabled = helpData.fiftyFiftyUsed;
+        document.getElementById('phoneAFriend').disabled = helpData.phoneAFriendUsed;
+        document.getElementById('askTheAudience').disabled = helpData.askTheAudienceUsed;
 
-        getMethodFetch('/api/getHelpCountSession')
-            .then((helpData) => {
-                if (helpData.fiftyFiftyUsed) {
-                    alert('Ezt a segítséget már használtad!');
-                    return;
-                }
-                else {
-                    helpAnswer(e.target,data.answers)
-                }
-
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    });
-
-    document.getElementById('phoneAFriend').addEventListener('click', (e) => {
-
-        getMethodFetch('/api/getHelpCountSession')
-            .then((helpData) => {
-                if (helpData.phoneAFriendUsed) {
-                    alert('Ezt a segítséget már használtad!');
-                    return;
-                }
-                else {
-                    helpAnswer(e.target,data.answers)
-                }
-
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    });
-
-    document.getElementById('askTheAudience').addEventListener('click', (e) => {
-
-        getMethodFetch('/api/getHelpCountSession')
-        .then((helpData) => {
-            if (helpData.askTheAudienceUsed) {
+        document.getElementById('fiftyFifty').addEventListener('click', (e) => {
+            if (!helpData.fiftyFiftyUsed) {
+                helpAnswer(e.target, data.answers);
+            } else {
                 alert('Ezt a segítséget már használtad!');
-                return;
             }
-            else {
-                helpAnswer(e.target,data.answers)
-            }
-
-        })
-        .catch((error) => {
-            console.error(error);
         });
+
+        document.getElementById('phoneAFriend').addEventListener('click', (e) => {
+            if (!helpData.phoneAFriendUsed) {
+                helpAnswer(e.target, data.answers);
+            } else {
+                alert('Ezt a segítséget már használtad!');
+            }
+        });
+
+        document.getElementById('askTheAudience').addEventListener('click', (e) => {
+            if (!helpData.askTheAudienceUsed) {
+                helpAnswer(e.target, data.answers);
+            } else {
+                alert('Ezt a segítséget már használtad!');
+            }
+        });
+    })
+    .catch((error) => {
+        console.error(error);
     });
 };
 
@@ -300,14 +282,15 @@ const showEndScreen = async (message, level, money) => {
     }
 };
 
-const helpAnswer = (button,data) => {
+const helpAnswer = async (button,data) => {
     switch (button.id) {
         case 'fiftyFifty':
             let disableAnswer = 0;
             document.getElementById('fiftyFifty').disabled = true;
+            await postMethodFetch('/api/useHelp', { helpType: 'fiftyFifty' });
 
             let j = 0;
-            while (disableAnswer < 2 && j < data.length) {
+            while (disableAnswer < 1 && j < data.length) {
                 let random = Math.floor(Math.random() * 4);
                 if (data[random].helyes == 0) {
                     const answerButton = document.getElementById(`answer${random + 1}`);
@@ -321,56 +304,52 @@ const helpAnswer = (button,data) => {
             break;
 
         case 'phoneAFriend':
-            getMethodFetch('/api/getGameState')
-            .then((gameState) => {
+            await getMethodFetch('/api/getGameState')
+            .then(async (gameState) => {
                 const currentRound = gameState.round;
-
                 document.getElementById('phoneAFriend').disabled = true;
-
-                let random = Math.floor(Math.random() * 100) + 1;
-
-
-                let j = 0;
-                while(j < data.length) {
-                    if (data[j].helyes == 1 && random > 0 + (currentRound * 3)) {
-                        const answerButton = document.getElementById(`answer${j + 1}`);
-                        answerButton.style.backgroundColor = 'green';
-                        alert(`A barátod szerint a helyes válasz: ${answerButton.textContent}`);
-                        break;
-                    }
-                    else if (data[j].helyes == 0 && random <= 0 + (currentRound * 3)) {
-                        const answerButton = document.getElementById(`answer${j + Math.floor(Math.random() * 4) + 1}`);
-                        answerButton.style.backgroundColor = 'green';
-                        alert(`A barátod szerint a helyes válasz: ${answerButton.textContent}`);
-                        break;
-                    }
-                    j++;
-                }     
-            })  
-            break;
-        case 'askTheAudience':
-                getMethodFetch('/api/getGameState')
-                .then((gameState) => {
-                    const currentRound = gameState.round;
-                    document.getElementById('askTheAudience').disabled = true;
+                await postMethodFetch('/api/useHelp', { helpType: 'phoneAFriend' });
 
                     let random = Math.floor(Math.random() * 100) + 1;
 
                     let j = 0;
-                    while(j < data.length) {
-                        if (data[j].helyes == 1 && random > 0 + (currentRound * 4)) {
-                            const answerButton = document.getElementById(`answer${j + 1}`);
-                            answerButton.style.backgroundColor = 'green';
-                            alert(`A közönség szerint a helyes válasz: ${answerButton.textContent}`);
-                            break;
-                        }
-                        else if (data[j].helyes == 0 && random <= 0 + (currentRound * 4)) {
-                            const answerButton = document.getElementById(`answer${j + Math.floor(Math.random() * 4) + 1}`);
-                            answerButton.style.backgroundColor = 'green';
-                            alert(`A közönség szerint a helyes válasz: ${answerButton.textContent}`);
-                            break;
-                        }
+                    while(j < data.length && data[j].helyes != 1) {
                         j++;
+                    }
+
+                    if(random > 0 + (currentRound * 3)) {
+                        alert(`A barátod azt mondta: ${data[j].valasz} a válasz`);
+                    }
+                    else {
+                        while(data[j].helyes != 0) {
+                            j = Math.floor(Math.random() * 4);
+                        }
+                        alert(`A barátod azt mondta: ${data[j].valasz} a válasz`);
+                    }
+                })
+            break;
+        case 'askTheAudience':
+                await getMethodFetch('/api/getGameState')
+                .then(async (gameState) => {
+                    const currentRound = gameState.round;
+                    document.getElementById('askTheAudience').disabled = true;
+                    await postMethodFetch('/api/useHelp', { helpType: 'askTheAudience' });
+
+                    let random = Math.floor(Math.random() * 100) + 1;
+
+                    let j = 0;
+                    while(j < data.length && data[j].helyes != 1) {
+                        j++;
+                    }
+
+                    if(random > 0 + (currentRound * 4)) {
+                        alert(`A közönség szerint a helyes válasz: ${data[j].valasz}`);
+                    }
+                    else {
+                        while(data[j].helyes != 0) {
+                            j = Math.floor(Math.random() * 4);
+                        }
+                        alert(`A közönség szerint a helyes válasz: ${data[j].valasz}`);
                     }
                 })
             break;

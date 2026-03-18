@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const loggedIn = document.getElementById('loggedIn');
     const adminBtn = document.getElementById('adminBtn');
 
+    postMethodFetch('/api/resetHelp', {});
+
     loginBtn.addEventListener('click', () => {
         window.location.href = 'login.html';
     });
