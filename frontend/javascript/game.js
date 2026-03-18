@@ -43,9 +43,9 @@ const loadQuestion = async (data) => {
     const takeWinBtn = document.getElementById('takeWinBtn');
     if (currentRound === 5 || currentRound === 10) {
         takeWinBtn.parentElement.style.display = 'block';
-        takeWinBtn.onclick = () => {
+        takeWinBtn.addEventListener('click', () => {
             confirmEnd(currentRound);
-        };
+        });
     } else {
         takeWinBtn.parentElement.style.display = 'none';
     }
@@ -54,9 +54,9 @@ const loadQuestion = async (data) => {
         const answerButton = document.getElementById(`answer${index + 1}`);
         answerButton.textContent = answer.valasz;
 
-        answerButton.onclick = () => {
+        answerButton.addEventListener('click', () => {
             checkAnswer(answer, currentRound);
-        };
+        });
     });
 
     document.getElementById('fiftyFifty').addEventListener('click', (e) => {
@@ -147,20 +147,20 @@ const confirmEnd = async (level) => {
         document.getElementById('continueYesBtn').textContent = 'Megállok';
         document.getElementById('continueNoBtn').textContent = 'Folytatom';
 
-        document.getElementById('continueYesBtn').onclick = () => {
+        document.getElementById('continueYesBtn').addEventListener('click', () => {
             modal.style.display = 'none';
             document.getElementById('questionBody').style.display = 'block';
             document.getElementById('answers').style.display = 'flex';
             document.getElementById('takeWinBtn').parentElement.style.display = 'block';
             showEndScreen(`Az igen! Nyereményed: ${garantaltNyeremeny}`, level, money);
-        };
+        });
 
-        document.getElementById('continueNoBtn').onclick = () => {
+        document.getElementById('continueNoBtn').addEventListener('click', () => {
             modal.style.display = 'none';
             document.getElementById('questionBody').style.display = 'block';
             document.getElementById('answers').style.display = 'flex';
             document.getElementById('takeWinBtn').parentElement.style.display = 'block';
-        };
+        });
     } catch (error) {
         console.error(error);
     }
@@ -240,7 +240,7 @@ const askContinue = async (currentRound, nextRound) => {
     document.getElementById('continueYesBtn').textContent = 'Továbblépek';
     document.getElementById('continueNoBtn').textContent = 'Megállok';
 
-    document.getElementById('continueYesBtn').onclick = async () => {
+    document.getElementById('continueYesBtn').addEventListener('click', async () => {
         modal.style.display = 'none';
         document.getElementById('questionBody').style.display = 'block';
         document.getElementById('answers').style.display = 'flex';
@@ -252,14 +252,14 @@ const askContinue = async (currentRound, nextRound) => {
         } catch (error) {
             console.error(error);
         }
-    };
+    });
 
-    document.getElementById('continueNoBtn').onclick = () => {
+    document.getElementById('continueNoBtn').addEventListener('click', () => {
         modal.style.display = 'none';
         document.getElementById('questionBody').style.display = 'block';
         document.getElementById('answers').style.display = 'flex';
         showEndScreen(`Azigen! Nyereményed: ${nyeremeny}`, currentRound, moneyAmount);
-    };
+    });
 };
 
 const getPrevLevelMoney = (level) => {
