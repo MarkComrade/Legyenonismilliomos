@@ -20,7 +20,7 @@ body {
     background-size: cover;
     background-position: center;
     justify-content: center;
-    padding-top: 30px; /* use padding instead of margin so 100vh includes this space */
+    padding-top: 30px; 
     box-sizing: border-box;
 }
 
@@ -159,11 +159,11 @@ body {
 
 .continue-modal {
     display: none;
-    background: white;
+    background: none;
     padding: 30px;
     border-radius: 10px;
     text-align: center;
-    border: 2px solid black;
+    margin: auto;
 }
 
 .continue-buttons {
@@ -275,7 +275,7 @@ body {
 }
 
 #endGameContainer {
-    display: none !important;
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -287,7 +287,7 @@ body {
 }
 
 #mainGameContainer {
-    display: flex !important;
+    display: flex;
     min-height: 100vh;
     overflow-y: auto;
 }

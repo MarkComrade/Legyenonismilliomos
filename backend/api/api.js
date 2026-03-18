@@ -111,7 +111,6 @@ router.post('/addQuestion', upload.none(), async (request, response) => {
             result: {question, difficulty, answer1, answer2, answer3, answer4, correctAnswer}
         });
     } catch (error) {
-        console.log(error);
         response.status(500).json({
             message: 'Hiba történt a kérdés hozzáadásakor.'
         });
@@ -121,8 +120,8 @@ router.post('/addQuestion', upload.none(), async (request, response) => {
 router.get('/getGameState', async (request, response) => {
     try {
         response.status(200).json({
-            round: request.session.round,
-            money: request.session.money
+            round: request.session.round || 1,
+            money: request.session.money || 0
         });
     } catch (error) {
         response.status(500).json({
@@ -133,12 +132,10 @@ router.get('/getGameState', async (request, response) => {
 
 router.post('/updateGameState', async (request, response) => {
     try {
-        const { round, money } = request.body;
+        const { round } = request.body;
         request.session.round = round;
-        request.session.money = money;
         response.status(200).json({
-            round: request.session.round,
-            money: request.session.money
+            round: request.session.round
         });
     } catch (error) {
         response.status(500).json({
@@ -147,55 +144,25 @@ router.post('/updateGameState', async (request, response) => {
     }
 });
 
-router.get('/getHelpCountSession', async (request, response) => { 
-    try { 
-        response.status(200).json({
-            fiftyFiftyUsed: request.session.fiftyFiftyUsed || false,
-            phoneAFriendUsed: request.session.phoneAFriendUsed || false,
-            askTheAudienceUsed: request.session.askTheAudienceUsed || false
-        });
-    }
-    catch (error) {
-        response.status(500).json({
-            message: 'Hiba történt a segítségek lekérésekor.'
-        });
-    }
-});
-
-router.post('/resetHelp', async (request, response) => {
-    try {
-        request.session.fiftyFiftyUsed = false;
-        request.session.phoneAFriendUsed = false;
-        request.session.askTheAudienceUsed = false;
-
-        response.status(200).json({
-            message: 'Segítségek visszaállítva.'
-        });
-    } catch (error) {
-        response.status(500).json({
-            message: 'Hiba történt a segítség használatakor.'
-        });
-    }
-});
-
 router.post('/useHelp', async (request, response) => {
     try {
         const { helpType } = request.body;
-        if (helpType === 'fiftyFifty') {
-            request.session.fiftyFiftyUsed = true;
-        } else if (helpType === 'phoneAFriend') {
-            request.session.phoneAFriendUsed = true;
-        } else if (helpType === 'askTheAudience') {
-            request.session.askTheAudienceUsed = true;
-        }
-        response.status(200).json({
-            message: `${helpType} használva.`
-        });
+        if (helpType === 'fiftyFifty') request.session.fiftyFiftyUsed = true;
+        if (helpType === 'phoneAFriend') request.session.phoneAFriendUsed = true;
+        if (helpType === 'askTheAudience') request.session.askTheAudienceUsed = true;
+
+        response.status(200).json({ success: true });
     } catch (error) {
-        response.status(500).json({
-            message: 'Hiba történt a segítség használatakor.'
-        });
+        response.status(500).json({ message: 'Hiba történt a segítség használatakor.' });
     }
+});
+
+router.get('/getHelpState', async (request, response) => {
+    response.status(200).json({
+        fiftyFifty: request.session.fiftyFiftyUsed || false,
+        phoneAFriend: request.session.phoneAFriendUsed || false,
+        askTheAudience: request.session.askTheAudienceUsed || false
+    });
 });
 
 router.get('/getQuestion', async (request, response) => { 
@@ -205,17 +172,83 @@ router.get('/getQuestion', async (request, response) => {
             request.session.money = 0;
         }
 
-        const question = await database.getQuestions(request.session.round);
-        const answers = await database.getAnswers(question.id);
-        
+        if (!request.session.currentQuestion || request.session.currentQuestion.nehezseg !== request.session.round) {
+            const question = await database.getQuestions(request.session.round);
+            const answers = await database.getAnswers(question.id);
+            
+            request.session.currentQuestion = question;
+            request.session.currentAnswers = answers;
+        }
+
         response.status(200).json({
-            question,
-            answers
+            question: request.session.currentQuestion,
+            answers: request.session.currentAnswers
         });
     } catch (error) {
         response.status(500).json({
             message: 'Hiba történt a kérdés lekérésekor.'
         });
+    }
+});
+
+router.post('/getPrizeInfo', async (request, response) => {
+    try {
+        const { level } = request.body;
+        const moneys = [0, 25000, 50000, 100000, 200000, 300000, 500000, 1000000, 2000000, 3000000, 5000000, 10000000, 25000000, 50000000, 85000000, 150000000];
+        const moneyTexts = ["0 Ft", "25 000 Ft", "50 000 Ft", "100 000 Ft", "200 000 Ft", "300 000 Ft", "500 000 Ft", "1 000 000 Ft", "2 000 000 Ft", "3 000 000 Ft", "5 000 000 Ft", "10 000 000 Ft", "25 000 000 Ft", "50 000 000 Ft", "85 000 000 Ft", "150 000 000 Ft"];
+
+        response.status(200).json({
+            amount: moneys[level] || 0,
+            text: moneyTexts[level] || "0 Ft"
+        });
+    } catch (error) {
+        response.status(500).json({ message: 'Hiba történt a nyeremény lekérésekor.' });
+    }
+});
+
+router.post('/checkAnswer', async (request, response) => {
+    try {
+        const { answer } = request.body;
+        let currentAnswers = request.session.currentAnswers;
+        let selectedAnswer;
+
+        if (currentAnswers) {
+            selectedAnswer = currentAnswers.find(a => a.valasz === answer.valasz);
+        }
+
+        if (!selectedAnswer) {
+            selectedAnswer = answer;
+        }
+
+        const currentRound = request.session.round || 1;
+
+        if (selectedAnswer.helyes == 1 || selectedAnswer.helyes === true) {
+            request.session.round = currentRound + 1;
+            response.status(200).json({ correct: true, nextRound: request.session.round });
+        } else {
+            let money = 0;
+            let nyeremeny = "0 Ft";
+            
+            if (currentRound > 10) {
+                money = 5000000;
+                nyeremeny = "5 000 000 Ft";
+            } else if (currentRound > 5) {
+                money = 300000;
+                nyeremeny = "300 000 Ft";
+            }
+
+            request.session.round = 1;
+            request.session.money = 0;
+            request.session.currentQuestion = null;
+            request.session.currentAnswers = null;
+            request.session.fiftyFiftyUsed = false;
+            request.session.phoneAFriendUsed = false;
+            request.session.askTheAudienceUsed = false;
+
+            response.status(200).json({ correct: false, money: money, nyeremeny: nyeremeny, currentRound: currentRound });
+        }
+    } catch (error) {
+        response.status(500).json({ message: 'Hiba történt a válasz ellenőrzésekor.' });
     }
 });
 
@@ -227,6 +260,11 @@ router.post('/endGame', async (request, response) => {
         }
         request.session.round = 1;
         request.session.money = 0;
+        request.session.currentQuestion = null;
+        request.session.currentAnswers = null;
+        request.session.fiftyFiftyUsed = false;
+        request.session.phoneAFriendUsed = false;
+        request.session.askTheAudienceUsed = false;
         response.status(200).json({
             message: 'Statisztika frissítve.'
         });
@@ -258,30 +296,15 @@ router.get('/getUserStats', async (request, response) => {
     }
 });
 
-router.get('/getGuaranteedMoney', async (request, response) => {
-    try {
-        const level = parseInt(request.query.level);
-        let garantaltNyeremeny = "0 Ft";
-        let money = 0;
-
-        if (level === 5) {
-            garantaltNyeremeny = "300 000 Ft";
-            money = 300000;
-        } else if (level === 10) {
-            garantaltNyeremeny = "5 000 000 Ft";
-            money = 5000000;
-        }
-
-        response.status(200).json({ garantaltNyeremeny, money });
-    } catch (error) {
-        response.status(500).json({ message: error.message });
-    }
-});
-
 router.post('/resetGame', async (request, response) => {
     try {
         request.session.round = 1;
         request.session.money = 0;
+        request.session.currentQuestion = null;
+        request.session.currentAnswers = null;
+        request.session.fiftyFiftyUsed = false;
+        request.session.phoneAFriendUsed = false;
+        request.session.askTheAudienceUsed = false;
         response.status(200).json({ success: true });
     } catch (error) {
         response.status(500).json({ success: false, message: error.message });

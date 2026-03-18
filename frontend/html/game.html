@@ -15,8 +15,8 @@
     <div class="container-fluid ibg justify-content-center align-items-center" id="endGameContainer">
         <div id="endGameScreen" class="text-center">
             <h2 id="endGameMessage" class="mb-4"></h2>
-            <button id="backToMainBtn" class="btn btn-lg m-2">Vissza a főoldalra</button>
-            <button id="newGameBtn" class="btn btn-lg m-2">Új játék</button>
+            <input type="button" id="backToMainBtn" class="btn btn-lg m-2" value="Vissza a főoldalra">
+            <input type="button" id="newGameBtn" class="btn btn-lg m-2" value="Új játék">
         </div>
     </div>  
 
@@ -124,38 +124,38 @@
 
                 <div class="row" id="answers">
                     <div class="col-sm-6 mb-3">
-                        <button id="answer1" class="btn valaszBtn"></button>
+                        <input type="button" id="answer1" class="btn valaszBtn">
                     </div>
                     <div class="col-sm-6 mb-3">
-                        <button id="answer2" class="btn valaszBtn"></button>
+                        <input type="button" id="answer2" class="btn valaszBtn">
                     </div>
                     <div class="col-sm-6 mb-3">
-                        <button id="answer3" class="btn valaszBtn"></button>
+                        <input type="button" id="answer3" class="btn valaszBtn">
                     </div>
                     <div class="col-sm-6 mb-3">
-                        <button id="answer4" class="btn valaszBtn"></button>
+                        <input type="button" id="answer4" class="btn valaszBtn">
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" id="helpRow">
                     <div class="col-sm-12">
-                    <input type="button" id="fiftyFifty" value="50:50">
+                        <input type="button" id="fiftyFifty" value="50:50">
                     </div>
 
                     <div class="col-sm-12">
-                    <input type="button" id="askTheAudience" value="Kérdezd a közönséget">
+                        <input type="button" id="askTheAudience" value="Kérdezd a közönséget">
                     </div>
 
                     <div class="col-sm-12">
-                    <input type="button" id="phoneAFriend" value="Hívj egy barátot">
+                        <input type="button" id="phoneAFriend" value="Hívj egy barátot">
                     </div>
                 </div>
 
-                <div id="continueModal" class="continue-modal">
+                <div id="continueModal" class="continue-modal" style="display: none;">
                     <div id="continueMessage"></div>
                     <div class="continue-buttons">
-                        <button id="continueYesBtn" class="btn btn-success btn-lg">Továbblépek</button>
-                        <button id="continueNoBtn" class="btn btn-danger btn-lg">Megállok</button>
+                        <input type="button" id="continueYesBtn" class="btn btn-success btn-lg" value="Továbblépek">
+                        <input type="button" id="continueNoBtn" class="btn btn-danger btn-lg" value="Megállok">
                     </div>
                 </div>
             </div>
@@ -165,32 +165,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            getMethodFetch('/api/getQuestion')
-                .then((data) => {
-                    loadQuestion(data);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-
-            document.getElementById('backToMainBtn').addEventListener('click', () => {
-                window.location.href = 'index.html';
-            });
-
-            document.getElementById('newGameBtn').addEventListener('click', () => {
-                document.getElementById('endGameContainer').style.display = 'none';
-                document.getElementById('mainGameContainer').style.display = 'block';
-                
-                postMethodFetch('/api/resetGame', {}).then(() => {
-                    getMethodFetch('/api/getQuestion').then((data) => {
-                        loadQuestion(data);
-                    });
-                });
-            });
-        });
-    </script>
 </body>
 </html>
