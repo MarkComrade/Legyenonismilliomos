@@ -92,6 +92,55 @@ document.addEventListener('DOMContentLoaded', async () => {
 const loadQuestion = async (data) => {
     const currentRound = data.question.nehezseg;
 
+    let img = document.getElementById('alcohol');
+    switch (currentRound){
+        case 1: 
+            img.src = "../images/lvl1.png";
+            break;
+        case 2: 
+            img.src = "../images/lvl2.png";
+            break;
+        case 3: 
+            img.src = "../images/lvl3.png";
+            break;
+        case 4: 
+            img.src = "../images/lvl4.png";
+            break;
+        case 5: 
+            img.src = "../images/lvl5.png";
+            break;
+        case 6: 
+            img.src = "../images/lvl6.png";
+            break;
+        case 7: 
+            img.src = "../images/lvl7.png";
+            break;
+        case 8: 
+            img.src = "../images/lvl8.png";
+            break;
+        case 9: 
+            img.src = "../images/lvl9.png";
+            break;
+        case 10: 
+            img.src = "../images/lvl10.png";
+            break;
+        case 11: 
+            img.src = "../images/lvl11.png";
+            break;
+        case 12: 
+            img.src = "../images/lvl12.png";
+            break;
+        case 13: 
+            img.src = "../images/lvl13.png";
+            break;
+        case 14: 
+            img.src = "../images/lvl14.png";
+            break;
+        case 15: 
+            img.src = "../images/lvl15.png";
+            break;
+    }
+
     for (let i = 1; i <= 15; i++) {
         const levelDiv = document.getElementById(`level${i}`);
         if (levelDiv) {

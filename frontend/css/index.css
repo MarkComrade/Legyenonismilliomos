@@ -327,3 +327,96 @@ body {
     border-radius: 5px;
     box-shadow: 0px 6px 8px rgba(192, 171, 52, 0.5);
 }
+
+
+.segitsegBtn {
+    background-color: rgb(173, 173, 173);
+    color: rgb(0, 0, 0);
+    font-size: 1.1rem;
+    border: none;
+    transition: background-color 0.3s ease;
+    border: solid 1px black;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.segitsegBtn:hover {
+    background-color: rgb(133, 133, 133);
+    color: rgb(0, 0, 0);
+    border: solid 1px black;
+    border-radius: 5px;
+}
+
+.savePoint{
+    color: rgb(0, 170, 0);
+}
+
+.segitsegBtn:disabled {
+    background-color: rgb(202, 0, 0);
+    color: rgb(233, 185, 29);
+    border: solid 1px black;
+    border-radius: 5px;
+    cursor: not-allowed;
+}
+
+#alcohol {
+    width: 100%; /* Required for spin-jump symmetry */
+    height: auto;
+    cursor: pointer;
+    perspective: 1000px;
+    z-index: 999;
+    backface-visibility: visible;
+    
+    /* Combines three independent animations:
+       1. Over-the-top translation, scale, and skew.
+       2. Rapid, unstable 3D rotation.
+       3. Intense, erratic flashing.
+    */
+    animation:
+        chaos-jump 1.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite,
+        chaos-spin 0.4s linear infinite,
+        chaos-flash 0.15s steps(1) infinite;
+        
+    will-change: transform, opacity, filter, box-shadow;
+}
+
+@keyframes chaos-jump {
+    0%, 100% { transform: translate(0, 0) scale(1) skew(0deg); }
+    10% { transform: translate(-300px, -400px) scale(0.1) skew(20deg); }
+    20% { transform: translate(400px, -150px) scale(3.5) skew(-30deg); }
+    30% { transform: translate(-100px, 500px) scale(0.5) skew(10deg); }
+    40% { transform: translate(500px, 300px) scale(2.8) skew(-15deg); }
+    50% { transform: translate(0, -600px) scale(0.2) skew(45deg); }
+    60% { transform: translate(-450px, 200px) scale(4.0) skew(-45deg); }
+    70% { transform: translate(250px, -350px) scale(0.3) skew(25deg); }
+    80% { transform: translate(-500px, -50px) scale(2.0) skew(-20deg); }
+    90% { transform: translate(300px, 450px) scale(0.8) skew(5deg); }
+}
+
+@keyframes chaos-spin {
+    0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+    50% { transform: rotateX(720deg) rotateY(-1440deg) rotateZ(360deg); }
+    100% { transform: rotateX(1440deg) rotateY(0deg) rotateZ(720deg); }
+}
+
+@keyframes chaos-flash {
+    0% { opacity: 1; filter: invert(0%) saturate(100%) blur(0px); box-shadow: none; }
+    20% { opacity: 0; filter: invert(100%) saturate(1000%) blur(5px); box-shadow: 0 0 100px 50px red; }
+    40% { opacity: 1; filter: sepia(100%) hue-rotate(90deg); box-shadow: 0 0 150px 70px lime; }
+    60% { opacity: 0.2; filter: contrast(500%) brightness(200%); box-shadow: 0 0 100px 50px blue; }
+    80% { opacity: 1; filter: grayscale(100%) invert(50%); box-shadow: 0 0 200px 100px fuchsia; }
+}
+
+#alcohol:hover {
+    /* Freezes all running animations (jump, spin, and flash) */
+    animation-play-state: paused;
+    
+    /* Resets visual distortions for clarity while hovering */
+    filter: none !important;
+    opacity: 1 !important;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    
+    /* Optional: Slight pop to indicate the hover state is active */
+    transform: scale(1.1); 
+    transition: transform 0.2s ease-out;
+}
