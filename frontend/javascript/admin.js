@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             answer2,
             answer3,
             answer4,
-            correctAnswer6
+            correctAnswer
         };
 
         await postMethodFetch('/api/addQuestion', data)
