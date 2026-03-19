@@ -30,8 +30,10 @@ CREATE TABLE users(
 	`password` VARCHAR(255) NOT NULL,
 	`total_money` INT DEFAULT 0,
 	`max_level` INT DEFAULT 0,
-	`role` VARCHAR(255) DEFAULT 'admin'
+	`role` VARCHAR(255) DEFAULT 'user'
 );
+
+INSERT INTO users (username, password, role) VALUES ('admin', 'admin', 'admin');
 
 -- Tábla adatainak mentése lom.kerdesek: ~4 949 rows (hozzávetőleg)
 /*!40000 ALTER TABLE `kerdesek` DISABLE KEYS */;

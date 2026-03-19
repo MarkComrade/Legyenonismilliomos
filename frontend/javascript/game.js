@@ -196,7 +196,7 @@ const checkAnswer = async (answer) => {
             const nextRound = response.nextRound;
             
             if (nextRound > 15) {
-                await showEndScreen('Vége a puttyon életenek, mostmár kazdag vagy: 150 000 000 Ft!', 15, 150000000);
+                await showEndScreen('Vége a puttyon életenek, mostmár kazdag vagy: 150 000 000 ₽!', 15, 150000000);
                 return;
             }
 

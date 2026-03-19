@@ -195,11 +195,11 @@ router.post('/getPrizeInfo', async (request, response) => {
     try {
         const { level } = request.body;
         const moneys = [0, 25000, 50000, 100000, 200000, 300000, 500000, 1000000, 2000000, 3000000, 5000000, 10000000, 25000000, 50000000, 85000000, 150000000];
-        const moneyTexts = ["0 Ft", "25 000 Ft", "50 000 Ft", "100 000 Ft", "200 000 Ft", "300 000 Ft", "500 000 Ft", "1 000 000 Ft", "2 000 000 Ft", "3 000 000 Ft", "5 000 000 Ft", "10 000 000 Ft", "25 000 000 Ft", "50 000 000 Ft", "85 000 000 Ft", "150 000 000 Ft"];
+        const moneyTexts = ["0 ₽", "25 000 ₽", "50 000 ₽", "100 000 ₽", "200 000 ₽", "300 000 ₽", "500 000 ₽", "1 000 000 ₽", "2 000 000 ₽", "3 000 000 ₽", "5 000 000 ₽", "10 000 000 ₽", "25 000 000 ₽", "50 000 000 ₽", "85 000 000 ₽", "150 000 000 ₽"];
 
         response.status(200).json({
             amount: moneys[level] || 0,
-            text: moneyTexts[level] || "0 Ft"
+            text: moneyTexts[level] || "0 ₽"
         });
     } catch (error) {
         response.status(500).json({ message: 'Hiba történt a nyeremény lekérésekor.' });
@@ -227,14 +227,14 @@ router.post('/checkAnswer', async (request, response) => {
             response.status(200).json({ correct: true, nextRound: request.session.round });
         } else {
             let money = 0;
-            let nyeremeny = "0 Ft";
+            let nyeremeny = "0 ₽";
             
             if (currentRound > 10) {
                 money = 5000000;
-                nyeremeny = "5 000 000 Ft";
+                nyeremeny = "5 000 000 ₽";
             } else if (currentRound > 5) {
                 money = 300000;
-                nyeremeny = "300 000 Ft";
+                nyeremeny = "300 000 ₽";
             }
 
             request.session.round = 1;
