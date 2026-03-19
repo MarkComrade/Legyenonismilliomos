@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+    getMethodFetch('/api/check-session')
+        .then((data) => {
+            if (!data.loggedIn || data.role !== 'admin') {
+                window.location.href = 'index.html';
+            }
+        });
+    
+
     document.getElementById('submitBtn').addEventListener('click', async () => {
         const question = document.getElementById('questionBody').value;
         const difficulty = document.getElementById('difficultySelect').value;
@@ -15,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             answer2,
             answer3,
             answer4,
-            correctAnswer
+            correctAnswer6
         };
 
         await postMethodFetch('/api/addQuestion', data)
